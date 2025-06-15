@@ -49,10 +49,10 @@ export function QuestionCard({ index, form, onRemove }: QuestionCardProps) {
   };
 
   return (
-    <div className="bg-gray-50 border rounded-md p-4 space-y-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-gray-50 border rounded-md p-4 space-y-2">
+      <div className="flex items-end justify-between mb-1">
         <div className="flex flex-col items-start">
-          <div className="font-medium">Question {index + 1}</div>
+          <div className="text-xs">Question {index + 1}</div>
           {errors.questions?.[index] && (
             <div className="text-xs text-destructive flex items-center gap-1">
               <Info className="h-3 w-3" />
@@ -71,33 +71,61 @@ export function QuestionCard({ index, form, onRemove }: QuestionCardProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-2 my-4">
-        <HelpCircle className="text-gray-500 w-5 h-5" />
-        <InputField
-          id={`questions.${index}.question`}
-          name={`questions.${index}.question`}
-          register={register}
-          placeholder="Enter Question"
-          error={errors.questions?.[index]?.question?.message}
-          className="bg-white"
-        />
+      <div className="flex flex-col gap-1 my-3">
+        <div className="relative w-full">
+          <div
+            className={
+              errors.questions?.[index]?.question?.message
+                ? "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-[23px] z-10 p-3 rounded-xl"
+                : "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-1/2 z-10 p-3 rounded-xl"
+            }
+          >
+            <HelpCircle className="text-gray-400 w-4 h-4" />
+          </div>
+          <InputField
+            id={`questions.${index}.question`}
+            name={`questions.${index}.question`}
+            register={register}
+            placeholder="Enter Question"
+            error={errors.questions?.[index]?.question?.message}
+            className="pl-12 bg-white"
+          />
+        </div>
+
+        {/* Show error below the input if it exists */}
+        {errors.questions?.[index]?.question?.message && (
+          <p className="text-sm text-red-500 ml-2">
+            {errors.questions[index].question.message}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         {options.map((_: any, optionIndex: number) => (
-          <div key={optionIndex} className="mb-3">
+          <div key={optionIndex} className="mb-1">
             <div className="flex justify-between mb-1">
-              <label className="text-sm text-gray-600">
+              <label className="text-xs text-gray-600">
                 Option {optionIndex + 1}
               </label>
             </div>
             <div className="flex items-center gap-2 w-full">
               <div className="flex items-center gap-2 w-full border rounded-md p-2 bg-white">
-                <Checkbox
-                  checked={correctAnswer === optionIndex}
-                  onCheckedChange={() => handleSetCorrectAnswer(optionIndex)}
-                  className="w-4 h-4 !border-gray-400 ml-1"
-                />
+                <div className="relative">
+                  <Checkbox
+                    checked={correctAnswer === optionIndex}
+                    onCheckedChange={() => handleSetCorrectAnswer(optionIndex)}
+                    className="w-4 h-4 !border-gray-400 ml-1"
+                  />
+
+                  {correctAnswer === optionIndex && (
+                    <img
+                      src="/images/check-icon.svg" // your checked image
+                      alt="Checked"
+                      className="absolute top-[3px] left-[4px] w-4 h-4"
+                    />
+                  )}
+                </div>
+
                 <InputField
                   id={`questions.${index}.options.${optionIndex}`}
                   name={`questions.${index}.options.${optionIndex}`}
@@ -107,19 +135,23 @@ export function QuestionCard({ index, form, onRemove }: QuestionCardProps) {
                   className="h-8 !border-0 !pl-0 !shadow-none bg-white"
                 />
               </div>
-              {optionIndex === options.length - 1 ? (
+              {options.length === 4 || optionIndex !== options.length - 1 ? (
                 <div
-                  className="p-4 border rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer"
-                  onClick={handleAddOption}
+                  className="p-2 border rounded-md bg-white hover:bg-gray-200 cursor-pointer"
+                  onClick={() => handleRemoveOption(optionIndex)}
                 >
-                  <Plus className="w-4 h-4 text-black !cursor-pointer" />
+                  <img
+                    src="/images/trash.svg" // your checked image
+                    alt="Checked"
+                    className="h-full"
+                  />
                 </div>
               ) : (
                 <div
-                  className="p-4 border rounded-md bg-gray-100 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleRemoveOption(optionIndex)}
+                  className="p-2 border rounded-md bg-white hover:bg-gray-200 cursor-pointer"
+                  onClick={handleAddOption}
                 >
-                  <Trash2 className="w-4 h-4 text-black !cursor-pointer" />
+                  <Plus className="w-full h-full text-black !cursor-pointer" />
                 </div>
               )}
             </div>

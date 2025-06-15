@@ -7,7 +7,7 @@ export const POST = authorizeAction(async (_req: any, context) => {
   const { form } = context;
 
   const result = await apiCall({
-    url: endpoints.quiz.show_question,
+    url: endpoints.quiz.notify_user,
     method: "post",
     data: form,
   });

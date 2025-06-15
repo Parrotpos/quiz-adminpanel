@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import LockRoomModal from "../lock-room-modal";
@@ -10,6 +10,10 @@ import QuestionCard from "../create-quiz/QuestionCard";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes/path";
 import WinnerPopup from "../create-quiz/winner-popup";
+import GradientTitle from "@/components/shared/gradient/gradient-title";
+import GradientButton from "@/components/molecules/gradient-button/gradient-button";
+import Link from "next/link";
+import TextHeader1 from "@/components/TextHeader1";
 
 export default function QuizDetail({ id }: { id: string }) {
   const socket = getSocket();
@@ -25,6 +29,7 @@ export default function QuizDetail({ id }: { id: string }) {
   const [winnerList, setWinnerList] = useState<any[]>([]);
   const [topUsers, setTopUsers] = useState<any[]>([]);
   const [lstQuestion, setLstQuestion] = useState<any[]>([]);
+  const [isShowCount, setIsShowCount] = useState(0);
 
   const router = useRouter();
 
@@ -79,43 +84,55 @@ export default function QuizDetail({ id }: { id: string }) {
       quizId: id,
     });
   };
+  const onHide = (questionId: string) => {
+    socket.emit("hide_question", {
+      quizId: id,
+      questionId: questionId,
+    });
+
+    console.log("onShowAnswerClick: ", id);
+  };
+
+  useEffect(() => {
+    const count = lstQuestion?.filter((q) => q.isShow).length;
+    setIsShowCount(count);
+  }, [lstQuestion]); // <- Run when lstQuestion changes
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="p-6">
+      <div className="p-3">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Quiz Details</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-lg font-bold text-gray-900">Quiz Details</h1>
           <div className="flex gap-3">
-            <Button
-              className="bg-green-600 hover:bg-green-700 text-white px-6 cursor-pointer"
-              onClick={() =>
-                router.push(paths.quiz_management.add_question(id))
-              }
-            >
-              Add Question
-            </Button>
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+            <Link href={paths.quiz_management.add_question(id)}>
+              <GradientButton
+                fromGradient="from-[#71D561]"
+                toGradient="to-[#00A32E]"
+                className="text-white px-6 cursor-pointer"
+                onClick={() =>
+                  router.push(paths.quiz_management.add_question(id))
+                }
+              >
+                Add Question
+              </GradientButton>
+            </Link>
+            <GradientButton
+              className="text-white px-6"
               onClick={() => setLockRoomModalOpen(true)}
             >
               Lock Room
-            </Button>
+            </GradientButton>
           </div>
         </div>
 
         {/* Quiz Overview - Full Width */}
         <Card className="bg-white shadow-sm mb-6 w-full">
-          <CardHeader className="pb-3">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Quiz Overview
-              </h2>
-              {/* <span className="text-sm text-gray-600">Jenny Alexander</span> */}
-            </div>
-          </CardHeader>
+          <TextHeader1 title="Quiz Overview" />
+          {/* <CardHeader className="">
+          </CardHeader> */}
           <CardContent>
-            <div className="grid grid-cols-7 gap-6 text-sm mb-4">
+            <div className="grid grid-cols-7 gap-3 text-xs mb-4">
               <div>
                 <p className="text-gray-600 mb-1">Quiz Title:</p>
                 <p className="font-medium">{quizData?.title}</p>
@@ -141,7 +158,7 @@ export default function QuizDetail({ id }: { id: string }) {
                 <p className="font-medium">{eliminatedPlayers}</p>
               </div>
               <div>
-                <p className="text-gray-600 text-sm mb-1">Top 5 Players:</p>
+                <p className="text-gray-600 mb-1">Top 5 Players:</p>
                 <div className="flex -space-x-2">
                   {topUsers.length
                     ? topUsers.map((player) => (
@@ -156,13 +173,6 @@ export default function QuizDetail({ id }: { id: string }) {
                 </div>
               </div>
             </div>
-            {/* <div className="flex justify-between items-center">
-
-                            <div className="text-right">
-                                <span className="text-gray-600 text-sm">Point: </span>
-                                <span className="font-semibold">18</span>
-                            </div>
-                        </div> */}
           </CardContent>
         </Card>
 
@@ -174,11 +184,13 @@ export default function QuizDetail({ id }: { id: string }) {
               lstQuestion.map((question: any, index: number) => {
                 return (
                   <QuestionCard
+                    key={index}
                     question={question}
                     selectedAnswers={selectedAnswers}
                     onAnswerSelect={handleAnswerSelect}
                     onShowQuestionClick={onShowQuestionClick}
                     onShowAnswerClick={onShowAnswerClick}
+                    onHide={onHide}
                   />
                 );
               })}
@@ -188,67 +200,148 @@ export default function QuizDetail({ id }: { id: string }) {
           <div className="w-full lg:w-[30%]">
             <div className="sticky top-6">
               <Card className="bg-white shadow-sm">
-                <CardHeader className="">
-                  <div className="flex items-center gap-4 pb-3 overflow-x-auto">
-                    {/* Question Number Indicators */}
-                    <div className="flex gap-1">
-                      {Array.from(
-                        { length: lstQuestion?.length || 0 },
-                        (_, index) => {
-                          const num = index + 1;
-                          return (
-                            <div
-                              key={num}
-                              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
-                                num === 5
-                                  ? "bg-green-500 text-white"
-                                  : num < 5
-                                  ? "bg-gray-300 text-gray-700"
-                                  : "bg-gray-100 text-gray-400"
-                              }`}
-                            >
-                              {num}
-                            </div>
-                          );
-                        }
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="text-sm text-gray-600 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <h3 className="font-semibold text-gray-900">
-                      Announcement
-                    </h3>
-                  </div>
-                  {quizData?.AnnouncementQuiz?.length > 0
-                    ? quizData?.AnnouncementQuiz.map((obj: any) => {
-                        return (
-                          <div>
-                            <p>
-                              <strong className="text-gray-900">
-                                {obj?.title}
-                              </strong>
-                            </p>
-                            <p>{obj?.description}</p>
+                {/* <CardHeader className=""> */}
+                <div className="flex items-center gap-4 overflow-x-auto p-3">
+                  {/* Question Number Indicators */}
+                  <div className="flex gap-1">
+                    {(() => {
+                      const totalQuestions = lstQuestion?.length || 0;
+                      const announcements = quizData?.AnnouncementQuiz || [];
+                      const totalAnnouncements = announcements.length;
+
+                      const output = [];
+                      const chunkSize =
+                        totalAnnouncements === 0
+                          ? totalQuestions
+                          : totalQuestions >= totalAnnouncements
+                          ? Math.ceil(totalQuestions / totalAnnouncements)
+                          : 1;
+
+                      let annIndex = 0;
+
+                      for (let i = 0; i < totalQuestions; i++) {
+                        const num = i + 1;
+
+                        // Add question bubble
+                        output.push(
+                          <div
+                            key={`q-${num}`}
+                            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
+                              num === isShowCount
+                                ? "bg-green-500 text-white"
+                                : "bg-gray-100 text-gray-400"
+                            }`}
+                          >
+                            {num < isShowCount ? (
+                              <img
+                                src="/images/DoneQuestion.svg"
+                                alt="Question Done"
+                                className="w-full h-full rounded-full border-2 border-white"
+                              />
+                            ) : (
+                              num
+                            )}
                           </div>
                         );
-                      })
-                    : "Not found"}
-                </CardContent>
+
+                        // Add announcement(s)
+                        const shouldInsertAnnouncement =
+                          totalAnnouncements > 0 &&
+                          ((totalQuestions >= totalAnnouncements &&
+                            (num % chunkSize === 0 ||
+                              num === totalQuestions)) ||
+                            totalQuestions < totalAnnouncements);
+
+                        if (shouldInsertAnnouncement) {
+                          const count =
+                            totalQuestions >= totalAnnouncements
+                              ? 1
+                              : Math.ceil(totalAnnouncements / totalQuestions);
+
+                          for (
+                            let j = 0;
+                            j < count && annIndex < totalAnnouncements;
+                            j++
+                          ) {
+                            output.push(
+                              <div
+                                key={`a-${annIndex}`}
+                                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium bg-gray-100 text-gray-400"
+                              >
+                                <img
+                                  src="/images/Announcement.svg"
+                                  alt="Announcement"
+                                  className="w-full h-full rounded-full border-2 border-white"
+                                />
+                              </div>
+                            );
+                            annIndex++;
+                          }
+                        }
+                      }
+
+                      // Add any remaining announcements
+                      while (annIndex < totalAnnouncements) {
+                        output.push(
+                          <div
+                            key={`a-${annIndex}`}
+                            className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium bg-gray-100 text-gray-400"
+                          >
+                            <img
+                              src="/images/Announcement.svg"
+                              alt="Announcement"
+                              className="w-full h-full rounded-full border-2 border-white"
+                            />
+                          </div>
+                        );
+                        annIndex++;
+                      }
+
+                      return output;
+                    })()}
+                  </div>
+                </div>
+                {/* </CardHeader> */}
+                <div className="text-sm text-gray-600 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  <div className="flex items-center gap-2">
+                    <GradientTitle title="Announcement" parentClass="!mt-0" />
+                  </div>
+                  <div className="px-3 py-1">
+                    {quizData?.AnnouncementQuiz?.length > 0
+                      ? quizData?.AnnouncementQuiz.map(
+                          (obj: any, idx: number) => {
+                            return (
+                              <div
+                                key={idx}
+                                className="bg-[#f5f5f5] p-3 mb-3 rounded-lg"
+                              >
+                                <p>
+                                  <strong className="text-gray-900 text-sm">
+                                    {obj?.title}
+                                  </strong>
+                                </p>
+                                <p className="text-xs mt-1">
+                                  {obj?.description}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )
+                      : "Not found"}
+                  </div>
+                </div>
               </Card>
             </div>
           </div>
         </div>
 
         <WinnerPopup winnerList={winnerList}>
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 mt-5"
+          <GradientButton
+            className="text-white px-6 mt-5"
             onClick={() => onCompleteQuiz()}
           >
             Complete quiz
-          </Button>
+          </GradientButton>
         </WinnerPopup>
       </div>
       <LockRoomModal

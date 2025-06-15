@@ -6,8 +6,8 @@ const GradientButton = ({
   children,
   className,
   title = "Button",
-  fromGradient = "from-[#8ABB2A]",
-  toGradient = "to-[#3C9B36]",
+  fromGradient = "from-[#0E76BC]",
+  toGradient = "to-[#283891]",
   disabled,
   loading,
   ...props

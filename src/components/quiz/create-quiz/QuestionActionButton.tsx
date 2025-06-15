@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { differenceInSeconds } from "date-fns";
 import { Clock } from "lucide-react";
 import moment from "moment";
+import GradientButton from "@/components/molecules/gradient-button/gradient-button";
 
 interface QuestionActionButtonProps {
   showDate: string; // UTC Date String
@@ -67,12 +68,14 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   return (
     <div className="flex flex-col gap-3">
       {!question.isShow && !question.isShowAnswer && (
-        <Button
-          className="bg-green-600 hover:bg-green-700 text-white px-6"
+        <GradientButton
+          fromGradient="from-[#71D561]"
+          toGradient="to-[#00A32E]"
+          className="text-white px-4 h-[30px] text-[12px]"
           onClick={() => onShowQuestionClick(questionId)}
         >
           Show Question
-        </Button>
+        </GradientButton>
       )}
 
       {underTenSeconds && (

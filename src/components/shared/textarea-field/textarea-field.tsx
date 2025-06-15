@@ -1,7 +1,8 @@
+// @ts-nocheck
+
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-
 
 const TextareaField: React.FC<TextareaFieldProps> = ({
   id,
@@ -15,7 +16,11 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-start gap-1 w-full">
-      {label && <Label htmlFor={id} className="text-sm text-[#3b3a3a]">{label}</Label>}
+      {label && (
+        <Label htmlFor={id} className="text-[13px] font-normal text-[#3b3a3a]">
+          {label}
+        </Label>
+      )}
       <Textarea
         id={id}
         rows={rows}

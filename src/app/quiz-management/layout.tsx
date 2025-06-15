@@ -1,7 +1,10 @@
+"use client";
+
 import { AuthGuard } from "@/auth/context/guard/auth-guard";
 import QuizLayout from "@/components/layout/quiz-layout";
+import { SplashScreen } from "@/components/loading-screen";
 import { CONFIG } from "@/global-config";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Layout({ children }: IChildren) {
   const skipAuth = CONFIG.skip_auth;
@@ -11,8 +14,10 @@ export default function Layout({ children }: IChildren) {
   }
 
   return (
-    <AuthGuard>
-      <QuizLayout>{children}</QuizLayout>
-    </AuthGuard>
+    <Suspense fallback={<SplashScreen />}>
+      <AuthGuard>
+        <QuizLayout>{children}</QuizLayout>
+      </AuthGuard>
+    </Suspense>
   );
 }

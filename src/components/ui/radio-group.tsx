@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import { CircleIcon } from "lucide-react"
+import * as React from "react";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { CircleIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function RadioGroup({
   className,
@@ -16,7 +16,7 @@ function RadioGroup({
       className={cn("grid gap-3", className)}
       {...props}
     />
-  )
+  );
 }
 
 function RadioGroupItem({
@@ -32,14 +32,35 @@ function RadioGroupItem({
       )}
       {...props}
     >
+      {/* To fill gradient in checked radio */}
+      <svg width="0" height="0">
+        <defs>
+          <linearGradient
+            id="greenGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop stopColor="#0E76BC" offset="0%" />
+            <stop stopColor="#283891" offset="100%" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <RadioGroupPrimitive.Indicator
         data-slot="radio-group-indicator"
-        className="relative flex items-center justify-center"
+        className="relative flex items-center justify-center !border-0"
       >
-        <CircleIcon className="fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2" />
+        {/* <CircleIcon className="!fill-green-600 stroke-0 !border-0 absolute top-1/2 left-1/2 size-3 -translate-x-1/2 -translate-y-1/2" /> */}
+
+        <CircleIcon
+          className="stroke-0 !border-0 absolute top-1/2 left-1/2 size-3 -translate-x-1/2 -translate-y-1/2"
+          style={{ fill: "url(#greenGradient)" }}
+        />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
-  )
+  );
 }
 
-export { RadioGroup, RadioGroupItem }
+export { RadioGroup, RadioGroupItem };

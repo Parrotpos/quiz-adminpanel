@@ -25,13 +25,18 @@ export function QuizDetails({ form }: QuizDetailsProps) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
-      {/* <h3 className="font-medium text-gray-700 mb-6">Quiz Details</h3> */}
       <GradientTitle title="Quiz Details" />
 
-      <div className="p-6">
-        <div className="mb-6">
+      <div className="p-6 !h-[calc(100dvh-280px)] overflow-auto">
+        <div className="mb-4">
           <ImageDropzone
-            value={form.watch()?.image}
+            value={
+              form.watch()?.image
+                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${
+                    form.watch()?.image
+                  }`
+                : ""
+            }
             onChange={(file: File | null) => setValue("image", file)}
           />
         </div>
@@ -50,7 +55,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <DatePicker
             id="date"
-            label="Select Date"
+            label="Date"
             value={form.watch()?.date}
             setValue={form.setValue}
             error={errors?.date?.message}
@@ -59,7 +64,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
           <div>
             <label
               htmlFor="time"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-[12px] font-medium text-gray-700 mb-1"
             >
               Time
             </label>
@@ -72,7 +77,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
                 type="time"
                 {...register("time")}
                 className={cn(
-                  "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-md focus:ring-1 focus:ring-primary focus:border-primary text-sm",
+                  "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary text-[13px] h-12",
                   errors.time && "border-destructive focus:ring-destructive"
                 )}
               />

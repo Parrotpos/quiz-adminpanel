@@ -3,7 +3,7 @@
 import { endpoints } from "@/utils/server/axios";
 import { apiCall, authorizeAction } from "src/lib/middleware/authorizeAction";
 
-export const POST = authorizeAction(async (_req: any, context) => {
+export const POST = authorizeAction(async (_req, context) => {
   const { form } = context;
 
   const result = await apiCall({

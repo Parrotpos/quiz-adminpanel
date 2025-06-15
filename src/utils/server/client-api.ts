@@ -1,3 +1,5 @@
+import { paths } from "@/routes/path";
+import path from "path";
 import { signOut } from "src/auth/context/jwt";
 
 interface ApiClientConfig {
@@ -34,12 +36,10 @@ export const apiClient = async (
 
   const res = await fetch(url, config);
 
-  // window.location.href = window.location.origin + routes.SIGNOUT.url;
-
   const responseData = await res.json();
 
-  if (responseData?.statusCode === 401) {
-    // window.location.href = window.location.origin + paths.auth.jwt.signIn;
+  if (!url.includes("login") && responseData?.statusCode === 401) {
+    window.location.href = window.location.origin + paths.auth.login;
     signOut();
   }
 

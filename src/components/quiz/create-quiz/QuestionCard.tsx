@@ -12,6 +12,7 @@ interface QuestionCardProps {
   onAnswerSelect: (questionId: number, answer: string) => void;
   onShowQuestionClick: (questionId: string) => void;
   onShowAnswerClick: (questionId: string) => void;
+  onHide: (questionId: string) => void;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -20,9 +21,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onAnswerSelect,
   onShowQuestionClick,
   onShowAnswerClick,
+  onHide,
 }) => {
   const [hovered, setHovered] = useState<string | null>(null);
-
   return (
     <Card
       key={question?._id}
@@ -30,71 +31,63 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       onMouseEnter={() => setHovered(question.id)}
       onMouseLeave={() => setHovered(null)}
     >
-      <CardContent className="p-6">
+      <CardContent className="py-3 px-4">
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 flex-1 pr-4">
+          <h3 className="text-sm font-semibold text-gray-900 flex-1 pr-4">
             {question.question}
           </h3>
+          {question.isShow && question.isShowAnswer && (
+            <Eye
+              className="h-5 w-5 text-gray-600 cursor-pointer"
+              onClick={() => {
+                onHide(question._id);
+              }}
+            />
+          )}
         </div>
 
         {/* Answer Options */}
         <div className="grid grid-cols-4 gap-3 mb-6">
-          {question.options.map((option: string) => (
-            <button
-              key={option}
-              onClick={() => onAnswerSelect(question.id, option)}
-              className={`p-3 text-left border rounded-lg transition-colors ${
-                selectedAnswers[question.id] === option
-                  ? "border-green-500 bg-green-50 text-green-700"
-                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-              }`}
+          {question.options.map((option: string, index: number) => (
+            <h3
+              key={`option${index}`}
+              className="px-3 py-2 text-sm text-gray-900 pr-4 border border-gray-200 rounded-full"
             >
               {option}
-            </button>
+            </h3>
           ))}
         </div>
 
         {/* Statistics and Timer */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center bg-[#F5F5F5] p-3 rounded-lg">
           <div className="grid grid-cols-4 gap-8 text-center">
             <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
-                <User className="w-4 h-4" />
-                <span className="text-xs">User Live</span>
+                <span className="text-xs font-semibold">User Live</span>
               </div>
-              <p className="text-lg font-semibold">{question?.userLive}</p>
+              <p className="text-lg font-bold">{question?.userLive}</p>
             </div>
             <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
-                <UserX className="w-4 h-4" />
-                <span className="text-xs">Eliminated User</span>
+                <span className="text-xs font-semibold">Eliminated User</span>
               </div>
-              <p className="text-lg font-semibold">{question?.eliminated}</p>
+              <p className="text-lg font-bold">{question?.eliminated}</p>
             </div>
             <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
-                <Eye className="w-4 h-4" />
-                <span className="text-xs">Viewers</span>
+                <span className="text-xs font-semibold">Viewers</span>
               </div>
-              <p className="text-lg font-semibold">{question?.viewer}</p>
+              <p className="text-lg font-bold">{question?.viewer}</p>
             </div>
             <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
-                <MousePointer className="w-4 h-4" />
-                <span className="text-xs">User Clicks</span>
+                <span className="text-xs font-semibold">User Clicks</span>
               </div>
-              <p className="text-lg font-semibold">{question?.click}</p>
+              <p className="text-lg font-bold">{question?.click}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* <div className="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {question.timer} Seconds
-              </span>
-            </div> */}
-
             <QuestionActionButton
               question={question}
               showDate={question.showDate}

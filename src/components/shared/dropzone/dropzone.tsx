@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { X } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   value,
@@ -48,12 +48,12 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   };
 
   return (
-    <div className="mb-6">
+    <div className="">
       {label && <label className="text-sm font-medium">{label}</label>}
 
       <div
         {...getRootProps()}
-        className={`w-full h-40 border-2 border-dashed rounded-md flex flex-col items-center justify-center cursor-pointer transition-colors ${
+        className={`w-full h-30 border-1 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors ${
           isDragActive
             ? "bg-blue-50 border-blue-300"
             : "border-gray-300 hover:bg-gray-50"
@@ -77,23 +77,10 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
           </div>
         ) : (
           <>
-            <div className="rounded-full bg-gray-100 p-2 mb-2">
-              <svg
-                className="w-6 h-6 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 4v16m8-8H4"
-                ></path>
-              </svg>
+            <div className="bg-[#e5e9f3] p-3 rounded-4xl text-[#22489c]">
+              <Upload />
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm mt-3 text-[#575757]">
               Upload or Drag & Drop an image
             </p>
           </>

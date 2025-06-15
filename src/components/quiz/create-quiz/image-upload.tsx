@@ -31,7 +31,7 @@ export function ImageUpload({ onImageChange }: ImageUploadProps) {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    
+
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
 
@@ -59,10 +59,17 @@ export function ImageUpload({ onImageChange }: ImageUploadProps) {
         className="hidden"
         onChange={handleFileChange}
       />
-      <label htmlFor="image-upload" className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+      <label
+        htmlFor="image-upload"
+        className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
+      >
         {previewUrl ? (
           <div className="w-full h-full relative">
-            <img src={previewUrl} alt="Preview" className="w-full h-full object-cover rounded-md" />
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="w-full h-full object-cover rounded-md"
+            />
             <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity rounded-md">
               <p className="text-white text-sm">Change Image</p>
             </div>
@@ -72,7 +79,9 @@ export function ImageUpload({ onImageChange }: ImageUploadProps) {
             <div className="rounded-full bg-gray-100 p-2 mb-2">
               <Upload className="w-5 h-5 text-gray-500" />
             </div>
-            <p className="text-sm text-gray-500">Upload or Drag & Drop an image</p>
+            <p className="text-sm text-gray-500">
+              Upload or Drag & Drop an image
+            </p>
           </>
         )}
       </label>

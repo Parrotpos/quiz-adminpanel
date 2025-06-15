@@ -1,4 +1,4 @@
 export const CONFIG = {
   appName: "Quiz Management",
-  skip_auth: true,
+  skip_auth: false,
 };

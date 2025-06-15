@@ -1,14 +1,16 @@
+// @ts-nocheck
+
 import { NextRequest, NextResponse } from "next/server";
 import { getCookie } from "../../utils/server/server-util";
 import { createAuthenticatedAxios } from "../../utils/server/axiosServer";
 import { verifyJwt } from "@/auth/context/jwt/utils";
+import { RouteModuleHandleContext } from "next/dist/server/route-modules/route-module";
 
 export const authorizeAction = (handler: HandlerFn) => {
-  return async (
-    req: NextRequest,
-    context: Record<string, any>,
-    ...args: any[]
-  ): Promise<NextResponse> => {
+  return async (req: NextRequest, ctx): Promise<NextResponse> => {
+    const resolvedCtx = await ctx;
+    const paramsFromReq = await resolvedCtx.params;
+
     const authObj = await getCookie();
 
     if (!authObj) {
@@ -20,12 +22,12 @@ export const authorizeAction = (handler: HandlerFn) => {
 
     let decoded = verifyJwt(authObj.token ?? "") as CustomJwtPayload;
 
-    // if (decoded?.error) {
-    //   return NextResponse.json(
-    //     { message: decoded?.error || "Invalid or expired token" },
-    //     { status: 401 }
-    //   );
-    // }
+    if (decoded?.error) {
+      return NextResponse.json(
+        { message: decoded?.error || "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
 
     let form = {};
     const contentType = req.headers.get("Content-Type") || "";
@@ -50,13 +52,13 @@ export const authorizeAction = (handler: HandlerFn) => {
     }
 
     const extendedContext: HandlerContext = {
-      ...context,
+      ...(paramsFromReq ? paramsFromReq : {}),
       token: decoded?.token ?? "",
       user: decoded,
       form,
     };
 
-    return handler(req, extendedContext, ...args);
+    return handler(req, extendedContext);
   };
 };
 

@@ -16,7 +16,7 @@ const InputField = <T extends Record<string, any>>({
 }: CustomInputFieldProps<T>): React.ReactElement => {
   return (
     <div className="flex flex-col items-start gap-1 w-full">
-      {label && <label className="text-sm text-[#3b3a3a]">{label}</label>}
+      {label && <label className="text-[12px] text-[#3b3a3a]">{label}</label>}
       <div className="relative w-full">
         {Icon && (
           <div className="absolute left-[17px] top-1/2 -translate-y-1/2 text-[#3b3a3a]">
@@ -29,7 +29,7 @@ const InputField = <T extends Record<string, any>>({
           {...register?.(id)}
           className={`${
             Icon ? "pl-12 pr-12" : "pl-4 pr-4"
-          } h-10 !w-full rounded-md border focus:!ring-0 ${
+          } h-12 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] ${
             error ? "border-red-500" : "border-gray-200"
           } ${className}`}
           {...props}

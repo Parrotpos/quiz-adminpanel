@@ -10,6 +10,7 @@ import {
   moderatorSchema,
 } from "@/utils/schema/moderator.schema";
 import { createNewModerator } from "@/api-service/moderator.service";
+import GradientButton from "@/components/molecules/gradient-button/gradient-button";
 
 interface ModeratorFormProps {
   onCancel: () => void;
@@ -32,7 +33,6 @@ export const ModeratorForm: React.FC<ModeratorFormProps> = ({
 
   const onSubmit = async (data: ModeratorFormValues) => {
     const moderatorRes = (await createNewModerator(data)) as IDefaultResponse;
-    console.log("moderatorRes: ", moderatorRes);
     if (!moderatorRes.status) {
       toast.error(moderatorRes?.message ?? "Moderator created successfully!");
     } else {
@@ -43,7 +43,7 @@ export const ModeratorForm: React.FC<ModeratorFormProps> = ({
   };
 
   return (
-    <div className="px-6 py-6 space-y-6">
+    <div className="px-6 py-4 space-y-6">
       <div>
         <label
           htmlFor="name"
@@ -97,23 +97,23 @@ export const ModeratorForm: React.FC<ModeratorFormProps> = ({
         )}
       </div>
 
-      <div className="flex gap-3 justify-end pt-4">
+      <div className="flex gap-3 justify-center pt-4">
         <Button
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="px-8"
+          className="font-bold px-8 py-5 w-[40%] text-[#0E76BC] border-2 border-[#0E76BC] hover:bg-[#0E76BC] hover:text-white"
         >
           Cancel
         </Button>
-        <Button
+        <GradientButton
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8 cursor-pointer"
+          className="font-bold text-white px-8 py-5 cursor-pointer w-[40%]"
           disabled={isLoading}
           onClick={() => handleSubmit(onSubmit)()}
         >
           {isLoading ? "Saving..." : "Save"}
-        </Button>
+        </GradientButton>
       </div>
     </div>
   );

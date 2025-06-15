@@ -1,8 +1,9 @@
 import { Lock } from "lucide-react";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { unlockRoom } from "@/api-service/quiz.service";
 import { toast } from "sonner";
+import GradientButton from "../molecules/gradient-button/gradient-button";
 
 interface LockRoomModalProps {
   open: boolean;
@@ -34,21 +35,27 @@ export default function LockRoomModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+      <DialogContent className="sm:max-w-[430px]" showCloseButton={false}>
+        <div className="bg-white rounded-2xl max-w-md w-full text-center">
+          {/* Top Gradient */}
+          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF3D0] to-transparent z-0 rounded-t-2xl" />
+
           {/* Lock Icon */}
-          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <Lock className="w-6 h-6 text-gray-700" />
+          <div className="flex items-center justify-center mx-auto mb-6">
+            <div className="w-28 h-2w-28 rounded-full flex items-center justify-center border-2 border-white">
+              {/* <Lock className="w-6 h-6 text-gray-700" /> */}
+              <img src="/images/lock-icon.png" />
             </div>
           </div>
 
           {/* Modal Content */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            You Want to lock room?
-          </h2>
+          <DialogTitle>
+            <div className="text-3xl font-bold text-gray-900 mb-3">
+              You Want to lock room?
+            </div>
+          </DialogTitle>
 
-          <p className="text-gray-600 mb-8 leading-relaxed">
+          <p className="text-[13px] text-gray-600 mb-8 leading-relaxed">
             Once the room is locked, no new participants will be able to join
             this quiz. Only users who have already joined will be allowed to
             continue.
@@ -58,17 +65,17 @@ export default function LockRoomModal({
           <div className="flex gap-4">
             <Button
               variant="outline"
-              className="flex-1 h-12 text-blue-600 border-blue-600 hover:bg-blue-50"
+              className="flex-1 h-12 text-blue-600 border-[#0E76BC] hover:bg-blue-50"
               onClick={() => onOpenChange(false)}
             >
               Cancel
             </Button>
-            <Button
-              className="flex-1 h-12 bg-blue-600 hover:bg-blue-700"
+            <GradientButton
+              className="flex-1 h-12"
               onClick={() => handleUnlockRoom()}
             >
               Lock Room
-            </Button>
+            </GradientButton>
           </div>
         </div>
       </DialogContent>

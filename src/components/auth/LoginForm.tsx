@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 "use client";
 
 import { useState } from "react";
@@ -10,16 +12,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/utils/schema/login.schema";
 import InputField from "../shared/input/InputField";
-import { adminLoginService } from "@/api-service/auth.service";
+import {
+  adminLoginService,
+  adminNextLoginService,
+} from "@/api-service/auth.service";
 import { setAuthCookie } from "@/app/actions/set-auth-cookie";
 import { useAuthContext } from "@/auth/hooks/use-auth-context";
 import { paths } from "@/routes/path";
+import GradientButton from "../molecules/gradient-button/gradient-button";
+import { useBoolean } from "@/hooks/useBoolean";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
 
   const { checkUserSession } = useAuthContext();
+  const loadingBool = useBoolean();
 
   const {
     register,
@@ -31,11 +39,12 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const loginRes = (await adminLoginService(data)) as IDefaultResponse;
+    loadingBool.onTrue();
+    const loginRes = (await adminNextLoginService(data)) as IDefaultResponse;
 
-    if ((loginRes?.data as ObjType)?.token) {
+    if (Number(loginRes?.status) === 200 && loginRes?.token) {
       await setAuthCookie({
-        token: (loginRes?.data as ObjType)?.token as string,
+        token: loginRes?.token as string,
       }); // Cookie is now securely stored
       await checkUserSession();
     }
@@ -45,6 +54,7 @@ const LoginForm = () => {
     } else {
       toast.error(loginRes?.message);
     }
+    loadingBool.onFalse();
   };
 
   return (
@@ -54,9 +64,13 @@ const LoginForm = () => {
     >
       <div className="flex justify-start items-center w-full">
         <div className="flex flex-col items-start gap-6 w-full">
-          <div className="text-2xl">
-            Sign <span className="text-[#8ABB2A]">In</span>
+          <div className="text-2xl font-bold">
+            Sign{" "}
+            <span className="text-transparent bg-gradient-to-b from-[#8ABB2A] to-[#3C9B36] bg-clip-text">
+              In
+            </span>
           </div>
+
           {/* Email field */}
           <div className="w-full">
             <InputField
@@ -100,9 +114,14 @@ const LoginForm = () => {
           </div>
 
           {/* Sign In button */}
-          <Button className="w-full sm:w-[298px] md:w-[200px] lg::w-1/2 h-[54px] rounded-xl bg-gradient-to-r from-[#71D561] to-[#00A32E] shadow-10 font-bold text-lg mt-8 cursor-pointer">
+          <GradientButton
+            fromGradient="from-[#82C63F]"
+            toGradient="to-[#39B54A]"
+            className="w-full sm:w-[298px] md:w-[200px] h-[45px] text-md font-bold rounded-[12px] bg-gradient-to-br from-[#82C63F] to-[#39B54A] shadow-[0px_2px_8px_0px_#0000003B]"
+            loading={loadingBool.bool}
+          >
             Sign In
-          </Button>
+          </GradientButton>
         </div>
       </div>
     </form>

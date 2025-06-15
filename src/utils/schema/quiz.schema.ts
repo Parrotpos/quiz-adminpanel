@@ -40,7 +40,7 @@ export const quizSchema = z.object({
     errorMap: () => ({ message: "Join type is required" }),
   }),
   maxUsers: z.coerce.number().default(0),
-  quizPrice: z.coerce.number().min(0, "Price must be a positive number"),
+  quizPrice: z.coerce.string().min(0, "Please enter valid quiz price"),
   questionCountdown: z.coerce
     .number()
     .min(1, "Countdown must be at least 1 second"),

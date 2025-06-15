@@ -18,10 +18,8 @@ export default axiosInstance;
 
 export const endpoints = {
   auth: {
+    next_login: "/api/auth/login",
     login: ADMIN_BASE_PATH + "/login",
-
-    // next_order_list: (id) => `/api/customers/${id}/orders/`,
-    // order_list: (id) => `/orders/customer/${id}`,
   },
   quiz: {
     next_create: "/api/quiz/create",
@@ -44,8 +42,8 @@ export const endpoints = {
     // Add Announcement
     next_announcement_create: "/api/quiz/add-announcement",
     announcement_create: ADMIN_BASE_PATH + "/quiz/add-announcement",
-    next_show_question: "/api/quiz/show-question",
-    show_question: ADMIN_BASE_PATH + "/quiz/question",
+    next_notify_user: "/api/quiz/notification",
+    notify_user: ADMIN_BASE_PATH + "/quiz/notification",
   },
   moderator: {
     next_create: "/api/moderator/create",

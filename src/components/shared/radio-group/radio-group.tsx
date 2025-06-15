@@ -29,13 +29,17 @@ const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
               value={opt.value}
               id={`${id}-${opt.value}`}
               className={`
-                w-5 h-5 border-2 border-gray-300 rounded-full
-                checked:border-[6px] checked:border-blue-600 focus:outline-none
-                transition-all duration-200 ease-in-out
+                w-5 h-5 border-[1px] border-gray-300 transition-all duration-100 ease-in-out 
+                data-[state=checked]:border-[#0E76BC] cursor-pointer
             `}
             />
 
-            <Label htmlFor={`${id}-${opt.value}`} className="!font-normal">{opt.label}</Label>
+            <Label
+              htmlFor={`${id}-${opt.value}`}
+              className="!font-normal text-[13px] cursor-pointer"
+            >
+              {opt.label}
+            </Label>
           </div>
         ))}
       </RadioGroup>

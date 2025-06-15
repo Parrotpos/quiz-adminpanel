@@ -3,11 +3,11 @@ import React from "react";
 const LoginThumbnail = () => {
   return (
     <div className="hidden md:block">
-      <div className="relative min-h-[400px] max-h-screen w-full rounded-2xl overflow-hidden">
+      <div className="relative min-h-[400px] w-full min-w-[350px] max-h-screen rounded-2xl overflow-hidden">
         <img
           src="/images/login-bg-image.png"
           alt="Login Background"
-          className="absolute inset-0 w-full h-full object-contain"
+          className="absolute inset-0 w-full h-full"
         />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-6 text-center">
           <img

@@ -13,6 +13,8 @@ const useQuizSocket = (
   setWinnerList: Dispatch<SetStateAction<any[]>>
 ) => {
   useEffect(() => {
+    if (!quizId) return;
+    console.log("quizId: ", quizId);
     const socket = getSocket();
 
     socket.connect();

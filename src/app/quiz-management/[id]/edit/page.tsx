@@ -7,13 +7,7 @@ export const metadata = {
   title: `Edit Quiz | Dashboard - ${CONFIG.appName}`,
 };
 
-interface Props {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const quizParams = await params;
 
   return <EditQuiz quizId={quizParams.id} />;

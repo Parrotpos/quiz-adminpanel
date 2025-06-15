@@ -2,8 +2,7 @@ import { endpoints } from "@/utils/server/axios";
 import { apiCall, authorizeAction } from "src/lib/middleware/authorizeAction";
 
 export const POST = authorizeAction(async (_req, context) => {
-  const { form } = context;
-  const params = await context?.params;
+  const { form, id } = context;
 
   const formData = new FormData();
 
@@ -36,7 +35,7 @@ export const POST = authorizeAction(async (_req, context) => {
   });
 
   const result = await apiCall({
-    url: endpoints.quiz.edit(params?.id),
+    url: endpoints.quiz.edit(id),
     method: "post",
     data: formData,
     headers: {
@@ -44,5 +43,6 @@ export const POST = authorizeAction(async (_req, context) => {
     },
   });
 
+  console.log("result: ", result);
   return Response.json(result, { status: result.statusCode });
 });

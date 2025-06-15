@@ -60,8 +60,8 @@ export const addAnnouncementForQuiz = (
   });
 };
 
-export const showQuestion = (data: any) => {
-  return apiClient(endpoints.quiz.next_show_question, {
+export const notifyUser = (data: any) => {
+  return apiClient(endpoints.quiz.next_notify_user, {
     method: "POST",
     data,
   });

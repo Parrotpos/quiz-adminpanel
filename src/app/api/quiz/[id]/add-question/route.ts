@@ -2,11 +2,10 @@ import { endpoints } from "@/utils/server/axios";
 import { apiCall, authorizeAction } from "src/lib/middleware/authorizeAction";
 
 export const POST = authorizeAction(async (_req, context) => {
-  const { form } = context;
-  const params = await context?.params;
+  const { form, id } = context;
 
   const result = await apiCall({
-    url: endpoints.quiz.que_create(params?.id),
+    url: endpoints.quiz.que_create(id),
     method: "post",
     data: form,
   });
