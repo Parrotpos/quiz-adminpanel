@@ -5,19 +5,18 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import "./styles.css";
 
 import NProgress from "nprogress";
-import { Suspense, useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
 // ----------------------------------------------------------------------
 
 export const ProgressBar = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     NProgress.configure({ showSpinner: true });
 
     const handleAnchorClick = (event: Event) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
-
       const currentUrl = window.location.href;
 
       if (targetUrl !== currentUrl) {
@@ -25,14 +24,12 @@ export const ProgressBar = () => {
       }
     };
 
-    const handleMutation = () => {
+    const attachAnchorListeners = () => {
       const anchorElements = document.querySelectorAll("a[href]");
 
       const filteredAnchors = Array.from(anchorElements).filter((element) => {
         const rel = element.getAttribute("rel");
-
         const href = element.getAttribute("href");
-
         const target = element.getAttribute("target");
 
         return (
@@ -43,30 +40,47 @@ export const ProgressBar = () => {
       filteredAnchors.forEach((anchor) =>
         anchor.addEventListener("click", handleAnchorClick)
       );
+
+      return filteredAnchors; // return for cleanup
     };
 
-    const mutationObserver = new MutationObserver(handleMutation);
+    const mutationObserver = new MutationObserver(() => {
+      attachAnchorListeners();
+    });
 
     mutationObserver.observe(document, { childList: true, subtree: true });
 
-    window.history.pushState = new Proxy(window.history.pushState, {
-      apply: (target, thisArg, [state, title, url]: [any, string, string?]) => {
+    const attachedAnchors = attachAnchorListeners(); // attach on initial render
+
+    const originalPushState = window.history.pushState;
+    window.history.pushState = new Proxy(originalPushState, {
+      apply: (target, thisArg, args: [any, string, string?]) => {
         NProgress.done();
-        return target.apply(thisArg, [state, title, url]);
+        return target.apply(thisArg, args);
       },
     });
-  });
 
-  return <NProgressDone />;
+    return () => {
+      mutationObserver.disconnect();
+      attachedAnchors.forEach((anchor) =>
+        anchor.removeEventListener("click", handleAnchorClick)
+      );
+      window.history.pushState = originalPushState; // Restore original pushState
+    };
+  }, []);
+
+  return (
+    <Suspense fallback={null}>
+      <NProgressDone />
+    </Suspense>
+  );
 };
 
 // ----------------------------------------------------------------------
 
 function NProgressDone() {
   const pathname = usePathname();
-
   const router = useRouter();
-
   const searchParams = useSearchParams();
 
   useEffect(() => {
