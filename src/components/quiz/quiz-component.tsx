@@ -61,7 +61,7 @@ const QuizComponent = () => {
     <div className="flex flex-col flex-[0_0_auto] space-y-4 my-2 mx-3">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
         <Typography size="lg" className="text-start font-bold">
-          Upcoming Quiz1
+          Upcoming Quiz
         </Typography>
         <div className="flex justify-around items-start sm:items-center gap-2 flex-col sm:flex-row">
           <div className="relative w-full sm:w-[400px] bg-white">
