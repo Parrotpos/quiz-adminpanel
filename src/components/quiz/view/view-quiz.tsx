@@ -15,6 +15,7 @@ import Link from "next/link";
 import Typography from "@/components/ui/typegraphy";
 import TextHeader1 from "@/components/TextHeader1";
 import { toast } from "sonner";
+import { AMPMTIme, dateToUTC } from "@/lib/utils";
 
 export default function ViewQuiz({ id }: { id: string }) {
   const participants = [
@@ -80,10 +81,14 @@ export default function ViewQuiz({ id }: { id: string }) {
                 />
                 <CardItem title="Status" description={quizData?.status} />
                 <CardItem
-                  title="Scheduled Date"
-                  description={quizData?.scheduledDate}
+                  title="Created By"
+                  description={quizData?.createdBy}
                 />
-                <CardItem title="Time" description={quizData?.time} />
+                <CardItem
+                  title="Scheduled Date"
+                  description={dateToUTC(quizData?.scheduledDate)}
+                />
+                <CardItem title="Time" description={AMPMTIme(quizData?.time)} />
                 <CardItem
                   title="Total Questions"
                   description={quizData?.totalQuestions}

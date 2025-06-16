@@ -7,6 +7,7 @@ const InputField = <T extends Record<string, any>>({
   className,
   iconClassName,
   icon: Icon,
+  leftIcon, // new support
   rightIcon,
   placeholder,
   type = "text",
@@ -18,17 +19,20 @@ const InputField = <T extends Record<string, any>>({
     <div className="flex flex-col items-start gap-1 w-full">
       {label && <label className="text-[12px] text-[#3b3a3a]">{label}</label>}
       <div className="relative w-full">
-        {Icon && (
+        {(leftIcon || Icon) && (
           <div className="absolute left-[17px] top-1/2 -translate-y-1/2 text-[#3b3a3a]">
-            <Icon className={`w-5 h-5 ${iconClassName}`} />
+            {leftIcon
+              ? leftIcon
+              : Icon && <Icon className={`w-5 h-5 ${iconClassName}`} />}
           </div>
         )}
+
         <Input
           type={type}
           placeholder={placeholder}
           {...register?.(id)}
           className={`${
-            Icon ? "pl-12 pr-12" : "pl-4 pr-4"
+            leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"
           } h-12 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] ${
             error ? "border-red-500" : "border-gray-200"
           } ${className}`}

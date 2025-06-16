@@ -14,5 +14,6 @@ declare global {
     type?: string;
     register?: UseFormRegister<T>;
     error?: FieldError;
+    leftIcon?: React.ReactNode;
   }
 }

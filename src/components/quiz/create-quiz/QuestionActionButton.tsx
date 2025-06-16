@@ -13,6 +13,7 @@ interface QuestionActionButtonProps {
   question: any;
   onShowQuestionClick: (id: string) => void;
   onShowAnswerClick: (id: string) => void;
+  quizData: any;
 }
 
 const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
@@ -21,23 +22,34 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   questionId,
   onShowQuestionClick,
   onShowAnswerClick,
+  quizData,
 }) => {
+  console.log("question: ", question);
   const [diffSeconds, setDiffSeconds] = useState<number>(NaN);
   const [count, setCount] = useState<number>(NaN);
   console.log("count: ", count);
 
   useEffect(() => {
     if (!showDate) return;
-    const start = moment.utc(showDate).subtract(22, "seconds"); // from BE
+    console.log(
+      "new Date().getTime() - new Date(showDate).getTime(): ",
+      new Date().getTime() - new Date(showDate).getTime()
+    );
+    console.log(
+      "new Date().getTime() - new Date(showDate).getTime(): 1000",
+      (new Date().getTime() - new Date(showDate).getTime()) / 1000
+    );
+
+    const start = moment.utc(showDate).subtract(0, "seconds"); // from BE
 
     const interval = setInterval(() => {
       const now = moment.utc();
       const diff = now.diff(start, "seconds");
 
-      if (diff < 10) {
-        setCount(diff + 1); // show 1 to 10
+      if (diff < quizData?.questionCountdown) {
+        setCount(diff + 1);
       } else {
-        setCount(10);
+        setCount(quizData?.questionCountdown);
         clearInterval(interval);
       }
     }, 1000);
@@ -47,8 +59,8 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   console.log("showDate: ", showDate);
 
   const isNaNTime = isNaN(count);
-  const underTenSeconds = count >= 0 && count < 10;
-  const tenOrMoreSeconds = count >= 10;
+  const underTenSeconds = count >= 0 && count < quizData?.questionCountdown;
+  const tenOrMoreSeconds = count >= quizData?.questionCountdown;
   if (question.isShow && question.isShowAnswer) {
     // console.log("Bane true", questionId);
     return null;

@@ -14,6 +14,7 @@ import { createNewQuiz } from "@/api-service/quiz.service";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes/path";
 import Typography from "@/components/ui/typegraphy";
+import moment from "moment";
 
 const QuizForm: React.FC<{
   defaultQuizFormValues?: ExtendedQuizFormValues;
@@ -68,7 +69,9 @@ const QuizForm: React.FC<{
     const formData = new FormData();
 
     Object.entries(actualVals).forEach(([key, value]) => {
-      if (key === "questions") {
+      if (key === "date") {
+        formData.append(key, moment(value).format("YYYY-MM-DD"));
+      } else if (key === "questions") {
         // Send entire questions array as JSON
         formData.append(key, JSON.stringify(value));
       } else if (value instanceof File) {

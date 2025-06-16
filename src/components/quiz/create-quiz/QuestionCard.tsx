@@ -13,6 +13,7 @@ interface QuestionCardProps {
   onShowQuestionClick: (questionId: string) => void;
   onShowAnswerClick: (questionId: string) => void;
   onHide: (questionId: string) => void;
+  quizData: any;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -22,6 +23,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onShowQuestionClick,
   onShowAnswerClick,
   onHide,
+  quizData,
 }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   return (
@@ -94,6 +96,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               questionId={question._id}
               onShowQuestionClick={onShowQuestionClick}
               onShowAnswerClick={onShowAnswerClick}
+              quizData={quizData}
             />
           </div>
         </div>

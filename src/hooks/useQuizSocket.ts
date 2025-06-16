@@ -1,5 +1,6 @@
 import { getSocket } from "@/lib/socket";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { toast } from "sonner";
 
 const useQuizSocket = (
   quizId: string,
@@ -20,7 +21,7 @@ const useQuizSocket = (
     socket.connect();
 
     const handleConnect = () => {
-      // console.log("✅ Connected to socket server:", socket.id);
+      console.log("✅ Connected to socket server:", socket.id);
       socket.emit("quiz_detail", { quizId: quizId });
       //   socket.emit("question_list", { quizId: quizId });
     };
@@ -54,7 +55,9 @@ const useQuizSocket = (
       setTopUsers(data);
     };
     const handleShowQuestion = (data: any) => {
-      // console.log("Show Question:", data);
+      if (data.code == 404) {
+        toast.error(data.error ?? "Something went wrong.");
+      }
     };
 
     const handleCurrentQuestion = (data: any) => {

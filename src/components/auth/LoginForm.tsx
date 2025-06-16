@@ -80,7 +80,13 @@ const LoginForm = () => {
               register={register}
               className="!rounded-2xl h-14"
               placeholder="Enter your email address"
-              icon={MailIcon}
+              leftIcon={
+                <img
+                  src={"/images/sms.svg"}
+                  alt={"mail icon"}
+                  className="h-5 w-5"
+                />
+              }
               error={errors?.email?.message}
             />
           </div>
@@ -95,7 +101,13 @@ const LoginForm = () => {
               className="!rounded-2xl h-14"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
-              icon={LockIcon}
+              leftIcon={
+                <img
+                  src={"/images/lock.svg"}
+                  alt={"mail icon"}
+                  className="h-5 w-5"
+                />
+              }
               rightIcon={
                 showPassword ? (
                   <EyeOffIcon
