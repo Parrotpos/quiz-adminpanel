@@ -127,11 +127,11 @@ export default function AssignModeratorPopup({
                 : "flex justify-center"
             }
           >
-            <div className="px-6 font-semibold text-2xl">
+            <DialogTitle className="px-6 font-semibold text-2xl">
               {currentView === "assign"
                 ? "Assign Moderator"
                 : "Create New Moderator"}
-            </div>
+            </DialogTitle>
             {currentView === "assign" && (
               <CircleX
                 className="w-5 h-5 cursor-pointer"
@@ -169,7 +169,7 @@ export default function AssignModeratorPopup({
                 </GradientButton>
                 <GradientButton
                   onClick={handleCreateNew}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                  className="text-white px-4"
                 >
                   Create New
                 </GradientButton>
@@ -182,7 +182,7 @@ export default function AssignModeratorPopup({
                       <tbody className="divide-y divide-gray-200">
                         {moderatorData.length > 0 &&
                           moderatorData?.map((user: any) => (
-                            <tr key={user.id} className="hover:bg-gray-50">
+                            <tr key={user?._id} className="hover:bg-gray-50">
                               <td className="px-6 py-4">{user.fullName}</td>
                               <td className="px-6 py-4">{user.email}</td>
                               {setValue && (

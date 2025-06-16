@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes/path";
 import { CircleX } from "lucide-react";
@@ -39,7 +39,9 @@ export default function WinnerPopup({
           showCloseButton={false}
         >
           <div className={"flex justify-between"}>
-            <div className="px-6 font-semibold text-2xl">Quiz Winners</div>
+            <DialogTitle className="px-6 font-semibold text-2xl">
+              Quiz Winners
+            </DialogTitle>
             <CircleX
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
@@ -55,8 +57,11 @@ export default function WinnerPopup({
                   <table className="min-w-full text-sm text-left">
                     <tbody className="divide-y divide-gray-200">
                       {winnerList.length > 0 &&
-                        winnerList?.map((user: any) => (
-                          <tr key={user.id} className="hover:bg-gray-50">
+                        winnerList?.map((user: any, index: number) => (
+                          <tr
+                            key={user?._id || index}
+                            className="hover:bg-gray-50"
+                          >
                             <td className="px-6 py-4">
                               <div className="flex items-center">
                                 <img

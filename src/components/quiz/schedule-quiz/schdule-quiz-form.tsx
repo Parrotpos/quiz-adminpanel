@@ -13,6 +13,7 @@ import { paths } from "@/routes/path";
 import { useBoolean } from "@/hooks/useBoolean";
 import GradientTitle from "@/components/shared/gradient/gradient-title";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const ScheduleQuizForm: React.FC<CommonQuizProps> = ({ quizId }) => {
   const router = useRouter();
@@ -126,14 +127,12 @@ const ScheduleQuizForm: React.FC<CommonQuizProps> = ({ quizId }) => {
           </div>
           <div className="mt-6">
             <div className="flex justify-start space-x-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {}}
-                className="font-bold px-8 py-5 w-[200px] text-[#0E76BC] border-2 border-[#0E76BC] hover:bg-[#0E76BC] hover:text-white"
+              <Link
+                href={paths.quiz_management.root}
+                className="font-bold px-2 py-1 text-center rounded-md w-[200px] text-[#0E76BC] border-2 border-[#0E76BC] hover:bg-[#0E76BC] hover:text-white"
               >
                 Skip
-              </Button>
+              </Link>
               <GradientButton
                 className="w-[200px]"
                 type="submit"

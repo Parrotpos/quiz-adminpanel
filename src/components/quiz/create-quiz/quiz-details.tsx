@@ -31,11 +31,11 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         <div className="mb-4">
           <ImageDropzone
             value={
-              form.watch()?.image
-                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${
-                    form.watch()?.image
-                  }`
-                : ""
+              watch("image") instanceof File
+                ? watch("image")
+                : watch("image")
+                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
+                : null
             }
             onChange={(file: File | null) => setValue("image", file)}
           />

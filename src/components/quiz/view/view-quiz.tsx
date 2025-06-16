@@ -159,8 +159,8 @@ export default function ViewQuiz({ id }: { id: string }) {
               if (quizData.videoUrl) {
                 router.push(`${paths.quiz_management.detail}/${id}`);
               } else {
+                setUrlModalOpen(true);
               }
-              setUrlModalOpen(true);
             }}
           >
             Start Quiz Now

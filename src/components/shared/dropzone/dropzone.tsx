@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, X } from "lucide-react";
+import { toast } from "sonner";
 
 const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   value,
@@ -13,19 +14,30 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (value) {
-      if (value instanceof File) {
-        setPreview(URL.createObjectURL(value));
-      } else {
-        setPreview(value);
-      }
+    if (value instanceof File) {
+      setPreview(URL.createObjectURL(value));
+    } else if (typeof value === "string") {
+      setPreview(value);
+    } else {
+      setPreview(null);
     }
   }, [value]);
+
+  const MAX_FILE_SIZE_MB = 4;
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
+
       if (file) {
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (fileSizeMB > MAX_FILE_SIZE_MB) {
+          toast.error(
+            `File is too large. Maximum size allowed is ${MAX_FILE_SIZE_MB} MB.`
+          );
+          return;
+        }
+
         onChange?.(file);
         setPreview(URL.createObjectURL(file));
       }
@@ -36,7 +48,8 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [],
+      "image/jpeg": [], // for .jpg and .jpeg
+      "image/png": [], // for .png
     },
     multiple: false,
   });
