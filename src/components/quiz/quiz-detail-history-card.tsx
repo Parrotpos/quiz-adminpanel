@@ -15,7 +15,6 @@ import React from "react";
 const QuizDetailHistoryCard = ({ data }: any) => {
   const router = useRouter();
 
-  console.log("data: ", data);
   return (
     <Link color="inherit" href={`${paths.quiz_management.view}/${data._id}`}>
       <div

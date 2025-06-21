@@ -15,6 +15,7 @@ import InputField from "../shared/input/InputField";
 import {
   adminLoginService,
   adminNextLoginService,
+  moderatorNextLoginService,
 } from "@/api-service/auth.service";
 import { setAuthCookie } from "@/app/actions/set-auth-cookie";
 import { useAuthContext } from "@/auth/hooks/use-auth-context";
@@ -22,7 +23,7 @@ import { paths } from "@/routes/path";
 import GradientButton from "../molecules/gradient-button/gradient-button";
 import { useBoolean } from "@/hooks/useBoolean";
 
-const LoginForm = () => {
+const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
 
@@ -40,19 +41,41 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     loadingBool.onTrue();
-    const loginRes = (await adminNextLoginService(data)) as IDefaultResponse;
+    if (isAdmin) {
+      const loginRes = (await adminNextLoginService(data, isAdmin)) as IDefaultResponse;
 
-    if (Number(loginRes?.status) === 200 && loginRes?.token) {
-      await setAuthCookie({
-        token: loginRes?.token as string,
-      }); // Cookie is now securely stored
-      await checkUserSession();
-    }
+      if (Number(loginRes?.status) === 200 && loginRes?.token) {
+        await setAuthCookie({
+          token: loginRes?.token as string,
+          userRole: "admin"
+        }); // Cookie is now securely stored
+        await checkUserSession();
+      }
 
-    if (loginRes.status) {
-      router.push(paths.quiz_management.root);
+      if (loginRes.status) {
+        router.push(paths.quiz_management.root);
+      } else {
+        toast.error(loginRes?.message);
+      }
     } else {
-      toast.error(loginRes?.message);
+      const loginRes = (await moderatorNextLoginService(data, isAdmin)) as IDefaultResponse;
+      if (Number(loginRes?.status) === 200 && loginRes?.token) {
+        console.log('loginRes: ', loginRes);
+        console.log('loginRes.data._id: ', loginRes.data._id);
+        await setAuthCookie({
+          token: loginRes?.token as string,
+          userRole: "moderator",
+          fullName: loginRes.data.fullName,
+          userId: loginRes.data._id
+        }); // Cookie is now securely stored
+        await checkUserSession();
+      }
+
+      if (loginRes.status) {
+        router.push(paths.quiz_management.root);
+      } else {
+        toast.error(loginRes?.message);
+      }
     }
     loadingBool.onFalse();
   };

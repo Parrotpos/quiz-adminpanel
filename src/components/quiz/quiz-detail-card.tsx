@@ -2,15 +2,13 @@
 
 import { formatHumanReadableDateTime } from "@/lib/utils";
 import { paths } from "@/routes/path";
-import { Edit, Share2 } from "lucide-react";
-import Link from "next/link";
+import { Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const QuizDetailCard = ({ data }: any) => {
+const QuizDetailCard = ({ data, userRole }: any) => {
   const router = useRouter();
 
-  console.log("data: ", data);
   return (
     <div
       className="bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 transform hover:scale-[1.01] cursor-pointer"
@@ -69,20 +67,21 @@ const QuizDetailCard = ({ data }: any) => {
               </p>
             </div>
           </div>
-
-          <button
-            className="text-gray-500 hover:text-gray-700 hover:scale-125 transition-all duration-300 cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`${paths.quiz_management.edit(data?._id ?? "")}`);
-            }}
-          >
-            <img
-              src={"/images/edit.svg"}
-              alt="user icon"
-              className="w-[16px]"
-            />
-          </button>
+          {userRole === "admin" &&
+            <button
+              className="text-gray-500 hover:text-gray-700 hover:scale-125 transition-all duration-300 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`${paths.quiz_management.edit(data?._id ?? "")}`);
+              }}
+            >
+              <img
+                src={"/images/edit.svg"}
+                alt="user icon"
+                className="w-[16px]"
+              />
+            </button>
+          }
         </div>
       </div>
     </div>

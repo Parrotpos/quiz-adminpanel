@@ -26,6 +26,7 @@ import InputField from "../shared/input/InputField";
 import { Search, X } from "lucide-react";
 import Link from "next/link";
 import QuizDetailHistoryCard from "./quiz-detail-history-card";
+import { getCookie } from "@/utils/server/server-util";
 
 const QuizComponent = () => {
   const router = useRouter();
@@ -34,18 +35,30 @@ const QuizComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const loadingBool = useBoolean(true);
+  const [userRole, setUserRole] = useState('')
+  const [userId, setUserId] = useState('')
+  useEffect(() => {
+    fetchUserRole()
+  }, [])
+  const fetchUserRole = async () => {
+    const authObj = await getCookie();
+    authObj?.userRole && setUserRole(authObj?.userRole)
+    authObj?.userId && setUserId(authObj?.userId)
+  }
 
   const onload = useCallback(async () => {
+    const authObj = await getCookie();
     loadingBool.onTrue();
     const quizRes = (await getQuizList({
       search: searchTerm,
       date: currentDateToUTC(),
+      moderatorId: authObj?.userId ?? userId
     })) as any;
 
     setQuizListData(quizRes?.data?.upcoming);
     setQuizHistoryData(quizRes?.data?.history);
     loadingBool.onFalse();
-  }, [searchTerm]);
+  }, [searchTerm, userId]);
 
   useEffect(() => {
     const handler = debounce(() => {
@@ -81,19 +94,22 @@ const QuizComponent = () => {
               }
             />
           </div>
+          {userRole === "admin" &&
+            <AssignModeratorPopup>
+              <GradientButton
+                fromGradient="from-[#71D561]"
+                toGradient="to-[#00A32E]"
+              >
+                View Moderator
+              </GradientButton>
+            </AssignModeratorPopup>
+          }
 
-          <AssignModeratorPopup>
-            <GradientButton
-              fromGradient="from-[#71D561]"
-              toGradient="to-[#00A32E]"
-            >
-              View Moderator
-            </GradientButton>
-          </AssignModeratorPopup>
-
-          <Link color="inherit" href={paths.quiz_management.create}>
-            <GradientButton>Create Quiz</GradientButton>
-          </Link>
+          {userRole === "admin" &&
+            <Link color="inherit" href={paths.quiz_management.create}>
+              <GradientButton>Create Quiz</GradientButton>
+            </Link>
+          }
         </div>
       </div>
       {loadingBool.bool ? (
@@ -104,7 +120,7 @@ const QuizComponent = () => {
             {quizListData?.length > 0 ? (
               quizListData.map((data: any, index: number) => (
                 <Fragment key={index}>
-                  <QuizDetailCard data={data} />
+                  <QuizDetailCard data={data} userRole={userRole} />
                 </Fragment>
               ))
             ) : (

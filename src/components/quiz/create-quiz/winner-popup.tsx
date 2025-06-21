@@ -14,7 +14,6 @@ export default function WinnerPopup({
   children,
   winnerList,
 }: WinnerPopupProps) {
-  console.log("winnerList: ", winnerList);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -23,8 +22,13 @@ export default function WinnerPopup({
   }, [winnerList]);
 
   return (
-    <div>
-      <div onClick={() => setIsOpen(true)}>{children && children}</div>
+    <div className="inline-block">
+      <div 
+        onClick={() => setIsOpen(true)} 
+        className="inline-block w-auto"
+      >
+        {children && children}
+      </div>
       <Dialog
         open={isOpen}
         onOpenChange={(open) => {

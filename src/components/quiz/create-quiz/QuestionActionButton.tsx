@@ -24,43 +24,35 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   onShowAnswerClick,
   quizData,
 }) => {
-  console.log("question: ", question);
   const [diffSeconds, setDiffSeconds] = useState<number>(NaN);
   const [count, setCount] = useState<number>(NaN);
-  console.log("count: ", count);
 
   useEffect(() => {
     if (!showDate) return;
-    console.log(
-      "new Date().getTime() - new Date(showDate).getTime(): ",
-      new Date().getTime() - new Date(showDate).getTime()
-    );
-    console.log(
-      "new Date().getTime() - new Date(showDate).getTime(): 1000",
-      (new Date().getTime() - new Date(showDate).getTime()) / 1000
-    );
 
-    const start = moment.utc(showDate).subtract(0, "seconds"); // from BE
+    const start = moment.utc(showDate);
+    const totalSeconds = quizData?.questionCountdown || 0;
+
+    // Initial countdown value
+    const now = moment.utc();
+    const elapsed = now.diff(start, "seconds");
+    const remaining = Math.max(0, totalSeconds - elapsed);
+    setCount(remaining);
 
     const interval = setInterval(() => {
-      const now = moment.utc();
-      const diff = now.diff(start, "seconds");
-
-      if (diff < quizData?.questionCountdown) {
-        setCount(diff + 1);
-      } else {
-        setCount(quizData?.questionCountdown);
-        clearInterval(interval);
-      }
+      setCount((prevCount) => {
+        if (prevCount <= 0) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prevCount - 1;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [showDate]);
-  console.log("showDate: ", showDate);
+  }, [showDate, quizData?.questionCountdown]);
 
   const isNaNTime = isNaN(count);
-  const underTenSeconds = count >= 0 && count < quizData?.questionCountdown;
-  const tenOrMoreSeconds = count >= quizData?.questionCountdown;
   if (question.isShow && question.isShowAnswer) {
     // console.log("Bane true", questionId);
     return null;
@@ -76,7 +68,7 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   //     tenOrMoreSeconds
   //   );
 
-  console.log("underTenSeconds: ", diffSeconds, underTenSeconds);
+  console.log("Countdown: ", count);
   return (
     <div className="flex flex-col gap-3">
       {!question.isShow && !question.isShowAnswer && (
@@ -90,14 +82,14 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
         </GradientButton>
       )}
 
-      {underTenSeconds && (
+      {count > 0 && (
         <div className="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
           <Clock className="w-4 h-4" />
           <span className="text-sm font-medium">{count}s</span>
         </div>
       )}
 
-      {tenOrMoreSeconds && (
+      {count <= 0 && (
         <Button
           className="bg-yellow-600 hover:bg-yellow-700 text-white px-6"
           onClick={() => onShowAnswerClick(questionId)}

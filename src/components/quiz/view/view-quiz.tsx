@@ -118,7 +118,7 @@ export default function ViewQuiz({ id }: { id: string }) {
                   title="Notified Players"
                   description={quizData?.notifiedPlayersCount}
                 />
-                <div className="flex items-start">
+                {/* <div className="flex items-start">
                   <span className="w-[150px] text-sm font-semibold text-[#686868]">
                     Participants:
                   </span>
@@ -147,7 +147,7 @@ export default function ViewQuiz({ id }: { id: string }) {
                       View All Participants
                     </Button>
                   </div>
-                </div>
+                </div> */}
               </div>
             </CardContent>
           </Card>

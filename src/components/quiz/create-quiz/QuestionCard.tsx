@@ -14,6 +14,7 @@ interface QuestionCardProps {
   onShowAnswerClick: (questionId: string) => void;
   onHide: (questionId: string) => void;
   quizData: any;
+  questionNo: number;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -24,21 +25,27 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onShowAnswerClick,
   onHide,
   quizData,
+  questionNo,
 }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+  console.log(question, "question: ")
   return (
     <Card
       key={question?._id}
-      className="bg-white shadow-sm relative"
+      className={`bg-white shadow-sm relative ${
+        (!question.isHide && (question.isShow || question.isShowAnswer || question.showDate))
+          ? 'border-2 border-[#00C951]' 
+          : 'border border-gray-200'
+      }`}
       onMouseEnter={() => setHovered(question.id)}
       onMouseLeave={() => setHovered(null)}
     >
       <CardContent className="py-3 px-4">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-sm font-semibold text-gray-900 flex-1 pr-4">
-            {question.question}
+            <span className="font-extrabold">{questionNo}.</span> {question.question}
           </h3>
-          {question.isShow && question.isShowAnswer && (
+          {!question.isHide && question.isShow && question.isShowAnswer && (
             <Eye
               className="h-5 w-5 text-gray-600 cursor-pointer"
               onClick={() => {
@@ -79,7 +86,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
                 <span className="text-xs font-semibold">Viewers</span>
               </div>
-              <p className="text-lg font-bold">{question?.viewer}</p>
+              <p className="text-lg font-bold">{question?.viewer > 0 ? question.viewer - 1 : 0}</p>
             </div>
             <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">

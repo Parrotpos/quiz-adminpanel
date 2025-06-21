@@ -91,13 +91,6 @@ export function QuestionCard({ index, form, onRemove }: QuestionCardProps) {
             className="pl-12 bg-white"
           />
         </div>
-
-        {/* Show error below the input if it exists */}
-        {errors.questions?.[index]?.question?.message && (
-          <p className="text-sm text-red-500 ml-2">
-            {errors.questions[index].question.message}
-          </p>
-        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">

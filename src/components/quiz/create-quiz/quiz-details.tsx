@@ -22,6 +22,8 @@ export function QuizDetails({ form }: QuizDetailsProps) {
     watch,
     setValue,
   } = form;
+  const values = watch(); // returns all current form values
+  console.log("values: ", values);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
@@ -34,8 +36,8 @@ export function QuizDetails({ form }: QuizDetailsProps) {
               watch("image") instanceof File
                 ? watch("image")
                 : watch("image")
-                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
-                : null
+                  ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
+                  : null
             }
             onChange={(file: File | null) => setValue("image", file)}
           />
@@ -111,24 +113,25 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div>
-            <InputField
-              label="Max Users"
-              id="maxUsers"
-              name="maxUsers"
-              register={register}
-              placeholder="Enter Max Users"
-              error={errors?.maxUsers?.message}
-            />
-          </div>
-
+          {values.joinType === "restricted" &&
+            <div>
+              <InputField
+                label="Max Users"
+                id="maxUsers"
+                name="maxUsers"
+                register={register}
+                placeholder="Enter Max Users"
+                error={errors?.maxUsers?.message}
+              />
+            </div>
+          }
           <div>
             <InputField
               label="Quiz Price"
               id="quizPrice"
               name="quizPrice"
               register={register}
-              placeholder="Enter Max Users"
+              placeholder="Enter Quiz Price"
               error={errors?.quizPrice?.message}
             />
           </div>
@@ -139,7 +142,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
               id="questionCountdown"
               name="questionCountdown"
               register={register}
-              placeholder="Enter Max Users"
+              placeholder="Enter Q. Countdown"
               error={errors?.questionCountdown?.message}
             />
           </div>

@@ -5,5 +5,5 @@ import { CONFIG } from "@/global-config";
 export const metadata = { title: `Sign in | ${CONFIG.appName}` };
 
 export default function Page() {
-  return <Login isAdmin={true}/>;
+  return <Login />;
 }

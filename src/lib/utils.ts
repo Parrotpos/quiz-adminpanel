@@ -26,10 +26,10 @@ export function formatHumanReadableDateTime(date: string, time: string) {
 
   // Determine human-readable format
   if (eventMoment.isSame(moment(), "day")) {
-    return `Today ${eventMoment.format("h A")}`;
+    return `Today ${eventMoment.format("hh:mm A")}`;
   } else if (eventMoment.isSame(moment().add(1, "day"), "day")) {
-    return `Tomorrow ${eventMoment.format("h A")}`;
+    return `Tomorrow ${eventMoment.format("hh:mm A")}`;
   } else {
-    return `${eventMoment.format("YYYY-MM-DD h A")}`;
+    return `${eventMoment.format("YYYY-MM-DD hh:mm A")}`;
   }
 }

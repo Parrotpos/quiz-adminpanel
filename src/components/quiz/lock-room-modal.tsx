@@ -44,7 +44,7 @@ export default function LockRoomModal({
           <div className="flex items-center justify-center mx-auto mb-6">
             <div className="w-28 h-2w-28 rounded-full flex items-center justify-center border-2 border-white">
               {/* <Lock className="w-6 h-6 text-gray-700" /> */}
-              <img src="/images/lock-icon.png" />
+              <img src="/images/lockIcon.png" />
             </div>
           </div>
 

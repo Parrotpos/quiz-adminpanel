@@ -20,6 +20,8 @@ export const endpoints = {
   auth: {
     next_login: "/api/auth/login",
     login: ADMIN_BASE_PATH + "/login",
+    next_moderator_login: "/api/auth/moderator/login",
+    moderator_login: "/moderator/login",
   },
   quiz: {
     next_create: "/api/quiz/create",

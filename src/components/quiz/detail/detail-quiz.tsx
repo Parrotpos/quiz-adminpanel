@@ -22,7 +22,7 @@ export default function QuizDetail({ id }: { id: string }) {
   }>({});
   const [lockRoomModalOpen, setLockRoomModalOpen] = useState(false);
   const [quizData, setQuizData] = useState<any>({});
-  console.log("quizData: ", quizData);
+
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
   const [joinPlayers, setJoinPlayers] = useState<number>(0);
   const [activePlayers, setActivePlayers] = useState<number>(0);
@@ -193,6 +193,7 @@ export default function QuizDetail({ id }: { id: string }) {
                     onShowAnswerClick={onShowAnswerClick}
                     onHide={onHide}
                     quizData={quizData}
+                    questionNo={index+1}
                   />
                 );
               })}
@@ -336,7 +337,6 @@ export default function QuizDetail({ id }: { id: string }) {
             </div>
           </div>
         </div>
-
         <WinnerPopup winnerList={winnerList}>
           <GradientButton
             className="text-white px-6 mt-5"

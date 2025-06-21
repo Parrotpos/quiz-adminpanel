@@ -34,7 +34,10 @@ declare global {
 
   type AuthCookie = {
     token?: string;
+    userRole?: string;
     refreshToken?: string;
+    userId?: string;
+    fullName?: string;
     [key: string]: any;
   };
 }

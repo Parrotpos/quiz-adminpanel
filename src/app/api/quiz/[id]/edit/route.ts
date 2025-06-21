@@ -47,6 +47,5 @@ export const POST = authorizeAction(async (_req, context) => {
     },
   });
 
-  console.log("result: ", result);
   return Response.json(result, { status: result.statusCode });
 });

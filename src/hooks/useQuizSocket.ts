@@ -15,24 +15,35 @@ const useQuizSocket = (
 ) => {
   useEffect(() => {
     if (!quizId) return;
-    console.log("quizId: ", quizId);
+    
+    console.log("Initializing socket for quiz:", quizId);
     const socket = getSocket();
 
-    socket.connect();
+    // If already connected, fetch data immediately
+    if (socket.connected) {
+      console.log("Socket already connected, fetching data...");
+      socket.emit("quiz_detail", { quizId: quizId });
+      socket.emit("question_list", { quizId: quizId });
+    }
 
     const handleConnect = () => {
       console.log("✅ Connected to socket server:", socket.id);
+      // Fetch data on connection
       socket.emit("quiz_detail", { quizId: quizId });
-      //   socket.emit("question_list", { quizId: quizId });
+      socket.emit("question_list", { quizId: quizId });
     };
 
     const handleQuizDetail = (data: any) => {
       // console.log("Handle Quiz Detail:", data);
-      setQuizData(data.data);
+      setQuizData(data?.data);
     };
     const handleQuestionList = (data: any) => {
       console.log("handleQuestionList: ", data);
-      setLstQuestion(data);
+      if (data && Array.isArray(data)) {
+        setLstQuestion(data);
+      } else {
+        console.error("Invalid question list data received:", data);
+      }
     };
     const handleTotalQuestion = (data: any) => {
       // console.log("Total question:", data);
@@ -43,11 +54,11 @@ const useQuizSocket = (
       setJoinPlayers(data);
     };
     const handleActivePlayers = (data: any) => {
-      // console.log("Active Players:", data);
+      console.log("Active Players:", data);
       setActivePlayers(data);
     };
     const handleEliminatedPlayers = (data: any) => {
-      // console.log("Eliminated Players:", data);
+      console.log("Eliminated Players:", data);
       setEliminatedPlayers(data);
     };
     const handleTopUsers = (data: any) => {
@@ -72,6 +83,12 @@ const useQuizSocket = (
     };
 
     // Register listeners
+    // Connect to socket if not already connected
+    if (!socket.connected) {
+      console.log("Establishing new socket connection...");
+      socket.connect();
+    }
+    
     socket.on("connect", handleConnect);
     socket.on("quiz_detail", handleQuizDetail);
     socket.on("question_list", handleQuestionList);

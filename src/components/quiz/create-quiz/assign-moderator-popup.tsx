@@ -44,7 +44,7 @@ export default function AssignModeratorPopup({
 
   const handleSearch = () => {
     // Implement search logic here
-    console.log("Searching for:", searchTerm);
+
     onload();
   };
 

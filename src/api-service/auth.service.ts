@@ -13,3 +13,10 @@ export const adminNextLoginService = (data: IAdminApiParams) => {
     data,
   });
 };
+
+export const moderatorNextLoginService = (data: IAdminApiParams) => {
+  return apiClient(endpoints.auth.next_moderator_login, {
+    method: "POST",
+    data,
+  });
+};
