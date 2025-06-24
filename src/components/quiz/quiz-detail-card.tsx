@@ -53,7 +53,7 @@ const QuizDetailCard = ({ data, userRole }: any) => {
       <div className="p-2">
         <div className="flex justify-between items-center">
           <div>
-            <div className="text-[14px] font-semibold text-gray-800">
+            <div className="text-[14px] font-semibold text-gray-800 text-ellipsis overflow-hidden line-clamp-1">
               {data.title}
             </div>
             <div className="flex">
@@ -67,21 +67,23 @@ const QuizDetailCard = ({ data, userRole }: any) => {
               </p>
             </div>
           </div>
-          {userRole === "admin" &&
-            <button
-              className="text-gray-500 hover:text-gray-700 hover:scale-125 transition-all duration-300 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`${paths.quiz_management.edit(data?._id ?? "")}`);
-              }}
-            >
-              <img
-                src={"/images/edit.svg"}
-                alt="user icon"
-                className="w-[16px]"
-              />
-            </button>
-          }
+          {userRole === "admin" && (
+            <div className="w-[50px]">
+              <button
+                className="text-gray-500 hover:text-gray-700 hover:scale-125 transition-all duration-300 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`${paths.quiz_management.edit(data?._id ?? "")}`);
+                }}
+              >
+                <img
+                  src={"/images/edit.svg"}
+                  alt="user icon"
+                  className="w-[16px]"
+                />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

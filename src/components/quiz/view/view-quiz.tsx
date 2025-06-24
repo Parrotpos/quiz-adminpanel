@@ -194,8 +194,8 @@ const CardItem = ({
   description: string;
 }) => {
   return (
-    <div className="flex items-center">
-      <span className="w-[150px] text-sm font-semibold text-[#686868]">
+    <div className="flex">
+      <span className="min-w-[150px] text-sm font-semibold text-[#686868]">
         {title}:
       </span>
       <span className="text-sm text-gray-900">{description}</span>

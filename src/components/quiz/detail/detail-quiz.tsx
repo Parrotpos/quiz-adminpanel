@@ -136,7 +136,16 @@ export default function QuizDetail({ id }: { id: string }) {
             <div className="grid grid-cols-7 gap-3 text-xs mb-4">
               <div>
                 <p className="text-gray-600 mb-1">Quiz Title:</p>
-                <p className="font-medium">{quizData?.title}</p>
+                <div className="relative group w-full max-w-full">
+                  <p className="font-medium line-clamp-2 break-all">
+                    {quizData?.title}
+                  </p>
+
+                  {/* Custom Tooltip */}
+                  <div className="absolute z-10 top-full left-0 mt-1 hidden group-hover:block bg-black text-white text-xs rounded-md px-2 py-1 w-[300px] max-w-[calc(100vw-2rem)] whitespace-pre-wrap break-words overflow-hidden break-all">
+                    {quizData?.title}
+                  </div>
+                </div>
               </div>
               <div>
                 <p className="text-gray-600 mb-1">Prize Pool:</p>
@@ -193,7 +202,7 @@ export default function QuizDetail({ id }: { id: string }) {
                     onShowAnswerClick={onShowAnswerClick}
                     onHide={onHide}
                     quizData={quizData}
-                    questionNo={index+1}
+                    questionNo={index + 1}
                   />
                 );
               })}
