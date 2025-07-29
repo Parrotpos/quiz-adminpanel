@@ -49,8 +49,7 @@ const InputField = <T extends Record<string, any>>({
             id={id}
             placeholder={placeholder}
             {...register?.(id)}
-            className={`$
-              {leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
+            className={`${leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
               text-[14px] pl-3 pt-3 h-28 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] resize-none ${
                 error ? "border-red-500" : "border-gray-200"
               } ${className}`}
@@ -61,8 +60,7 @@ const InputField = <T extends Record<string, any>>({
             type={type}
             placeholder={placeholder}
             {...register?.(id)}
-            className={`$
-              {leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
+            className={`${leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
               h-12 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] ${
                 error ? "border-red-500" : "border-gray-200"
               } ${className}`}
