@@ -54,7 +54,7 @@ const DatePicker: React.FC<CustomDatePickerProps> = ({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={`h-12 w-full justify-between text-left rounded-lg !font-normal text-[14px] text-[#a1a1a1] ${
+            className={`h-12 w-full justify-between text-left rounded-lg !font-normal text-[14px] text-[#000] ${
               error ? "border-red-500" : "border-gray-200"
             } ${className}`}
           >

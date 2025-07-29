@@ -35,7 +35,9 @@ const AddQuizQuestion = ({ quizId }: EditQuizProps) => {
   return loadingBool.bool ? (
     <AddQuestionsSkeleton />
   ) : (
-    <AddQuizQuestions quizData={quizData} quizId={quizId} />
+    <div className="max-w-2xl p-4">
+      <AddQuizQuestions quizData={quizData} quizId={quizId} />
+    </div>
   );
 };
 

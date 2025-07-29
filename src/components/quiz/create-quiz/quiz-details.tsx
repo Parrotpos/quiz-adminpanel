@@ -36,8 +36,8 @@ export function QuizDetails({ form }: QuizDetailsProps) {
               watch("image") instanceof File
                 ? watch("image")
                 : watch("image")
-                  ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
-                  : null
+                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
+                : null
             }
             onChange={(file: File | null) => setValue("image", file)}
           />
@@ -79,8 +79,8 @@ export function QuizDetails({ form }: QuizDetailsProps) {
                 type="time"
                 {...register("time")}
                 className={cn(
-                  "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary text-[13px] h-12",
-                  errors.time && "border-destructive focus:ring-destructive"
+                  "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-[13px] h-12",
+                  errors.time && "border-destructive"
                 )}
               />
             </div>
@@ -113,7 +113,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          {values.joinType === "restricted" &&
+          {values.joinType === "restricted" && (
             <div>
               <InputField
                 label="Max Users"
@@ -124,7 +124,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
                 error={errors?.maxUsers?.message}
               />
             </div>
-          }
+          )}
           <div>
             <InputField
               label="Quiz Price"
@@ -149,6 +149,10 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         </div>
 
         <div className="mb-4">
+          <label className="text-[12px] text-[#3b3a3a] mb-1">
+            Assign moderator
+          </label>
+
           <AssignModeratorPopup
             setValue={setValue}
             assignedModeratorId={watch()?.moderator}

@@ -38,19 +38,27 @@ export default function LockRoomModal({
       <DialogContent className="sm:max-w-[430px]" showCloseButton={false}>
         <div className="bg-white rounded-2xl max-w-md w-full text-center">
           {/* Top Gradient */}
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FAF3D0] to-transparent z-0 rounded-t-2xl" />
+          <div
+            className="absolute top-0 left-0 w-full h-32 z-0 rounded-t-lg"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(166, 125, 22, 0.329) 0%, rgba(166, 125, 22, 0.161) 45.38%, rgba(166, 125, 22, 0) 100%)",
+            }}
+          />
 
           {/* Lock Icon */}
-          <div className="flex items-center justify-center mx-auto mb-6">
-            <div className="w-28 h-2w-28 rounded-full flex items-center justify-center border-2 border-white">
-              {/* <Lock className="w-6 h-6 text-gray-700" /> */}
+          {/* <div className="flex items-center justify-center mx-auto mb-6">
+            <div className="w-28 h-2w-28 rounded-full flex items-center justify-center">
               <img src="/images/lockIcon.png" />
             </div>
-          </div>
+          </div> */}
 
+          <div className="h-28 w-28 bg-[#A9A05814] flex items-center justify-center mx-auto mb-6 rounded-full p-1">
+            <img src="/images/lockIcon.png" />
+          </div>
           {/* Modal Content */}
           <DialogTitle>
-            <div className="text-3xl font-bold text-gray-900 mb-3">
+            <div className="text-2xl font-bold text-gray-900 mb-3">
               You Want to lock room?
             </div>
           </DialogTitle>
@@ -65,7 +73,7 @@ export default function LockRoomModal({
           <div className="flex gap-4">
             <Button
               variant="outline"
-              className="flex-1 h-12 text-blue-600 border-[#0E76BC] hover:bg-blue-50"
+              className="flex-1 h-12 text-[#0E76BC] border-[#0E76BC] hover:text-[#0E76BC]"
               onClick={() => onOpenChange(false)}
             >
               Cancel

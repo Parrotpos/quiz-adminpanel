@@ -1,12 +1,12 @@
 import { UseFormRegister } from "react-hook-form";
 
 declare global {
-  interface TextareaFieldProps {
+  interface TextareaFieldProps<T> {
     id: string;
     label?: string;
     className?: string;
     placeholder?: string;
-    register?: UseFormRegister<QuizFormValues>;
+    register?: UseFormRegister<T>;
     error?: string;
     rows?: number;
     [key: string]: any; // for spreading other props

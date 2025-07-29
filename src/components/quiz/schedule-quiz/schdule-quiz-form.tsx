@@ -14,6 +14,7 @@ import { useBoolean } from "@/hooks/useBoolean";
 import GradientTitle from "@/components/shared/gradient/gradient-title";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TextareaField from "@/components/shared/textarea-field/textarea-field";
 
 const ScheduleQuizForm: React.FC<CommonQuizProps> = ({ quizId }) => {
   const router = useRouter();
@@ -94,6 +95,7 @@ const ScheduleQuizForm: React.FC<CommonQuizProps> = ({ quizId }) => {
                               errors?.announcements?.[index]?.description
                                 ?.message
                             }
+                            multiline
                           />
                         </div>
                       </div>
@@ -129,7 +131,7 @@ const ScheduleQuizForm: React.FC<CommonQuizProps> = ({ quizId }) => {
             <div className="flex justify-start space-x-4">
               <Link
                 href={paths.quiz_management.root}
-                className="font-bold px-2 py-1 text-center rounded-md w-[200px] text-[#0E76BC] border-2 border-[#0E76BC] hover:bg-[#0E76BC] hover:text-white"
+                className="font-bold px-2 py-1 text-center rounded-md w-[200px] text-[#0E76BC] border-2 border-[#0E76BC]"
               >
                 Skip
               </Link>

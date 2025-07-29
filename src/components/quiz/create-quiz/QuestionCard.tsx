@@ -83,12 +83,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                 {question?.viewer > 0 ? question.viewer - 1 : 0}
               </p>
             </div>
-            <div>
+            {/* <div>
               <div className="flex items-center justify-center gap-1 text-gray-600 mb-1">
                 <span className="text-xs font-semibold">Right Clicks</span>
               </div>
               <p className="text-lg font-bold">{question?.click}</p>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center gap-4">

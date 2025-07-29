@@ -1,18 +1,35 @@
 import { Input } from "../../ui/input";
 import React from "react";
 
+interface CustomInputFieldProps<T>
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  id: string;
+  label?: string;
+  className?: string;
+  iconClassName?: string;
+  icon?: React.ElementType;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  placeholder?: string;
+  type?: string;
+  register?: any;
+  error?: string;
+  multiline?: boolean;
+}
+
 const InputField = <T extends Record<string, any>>({
   id,
   label,
   className,
   iconClassName,
   icon: Icon,
-  leftIcon, // new support
+  leftIcon,
   rightIcon,
   placeholder,
   type = "text",
   register,
   error,
+  multiline,
   ...props
 }: CustomInputFieldProps<T>): React.ReactElement => {
   return (
@@ -27,17 +44,31 @@ const InputField = <T extends Record<string, any>>({
           </div>
         )}
 
-        <Input
-          type={type}
-          placeholder={placeholder}
-          {...register?.(id)}
-          className={`${
-            leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"
-          } h-12 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] ${
-            error ? "border-red-500" : "border-gray-200"
-          } ${className}`}
-          {...props}
-        />
+        {multiline ? (
+          <textarea
+            id={id}
+            placeholder={placeholder}
+            {...register?.(id)}
+            className={`$
+              {leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
+              text-[14px] pl-3 pt-3 h-28 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] resize-none ${
+                error ? "border-red-500" : "border-gray-200"
+              } ${className}`}
+            {...props}
+          />
+        ) : (
+          <Input
+            type={type}
+            placeholder={placeholder}
+            {...register?.(id)}
+            className={`$
+              {leftIcon || Icon ? "pl-12 pr-12" : "pl-4 pr-4"}
+              h-12 !w-full rounded-lg border focus:!ring-0 placeholder:text-[14px] ${
+                error ? "border-red-500" : "border-gray-200"
+              } ${className}`}
+            {...props}
+          />
+        )}
         {rightIcon && (
           <div className="absolute right-[17px] top-1/2 -translate-y-1/2 text-[#3b3a3a] cursor-pointer">
             {rightIcon}

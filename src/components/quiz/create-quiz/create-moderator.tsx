@@ -102,7 +102,7 @@ export const ModeratorForm: React.FC<ModeratorFormProps> = ({
           type="button"
           variant="outline"
           onClick={onCancel}
-          className="font-bold px-8 py-5 w-[40%] text-[#0E76BC] border-2 border-[#0E76BC] hover:bg-[#0E76BC] hover:text-white"
+          className="font-bold px-8 py-5 w-[40%] text-[#0E76BC] border-2 border-[#0E76BC] hover:text-[#0E76BC]"
         >
           Cancel
         </Button>

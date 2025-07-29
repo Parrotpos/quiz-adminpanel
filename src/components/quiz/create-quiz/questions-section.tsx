@@ -32,7 +32,7 @@ export function QuestionsSection({ form, hideTitle }: QuestionsSectionProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
+    <div className="bg-white rounded-lg border border-gray-200 p-5">
       <div className="flex flex-col overflow-hidden">
         {!hideTitle && (
           <div className="pb-2">
@@ -42,7 +42,7 @@ export function QuestionsSection({ form, hideTitle }: QuestionsSectionProps) {
 
         <div className="!max-h-[calc(100dvh-300px)] overflow-y-auto pr-2 !flex-1">
           {watch()?.questions?.map((_, index: number) => (
-            <div key={index} className="relative p-5">
+            <div key={index} className="relative py-5">
               <QuestionCard
                 index={index}
                 form={form}

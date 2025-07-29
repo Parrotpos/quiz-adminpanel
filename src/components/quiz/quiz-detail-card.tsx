@@ -68,7 +68,7 @@ const QuizDetailCard = ({ data, userRole }: any) => {
             </div>
           </div>
           {userRole === "admin" && (
-            <div className="w-[50px]">
+            <div className="flex justify-end w-[50px]">
               <button
                 className="text-gray-500 hover:text-gray-700 hover:scale-125 transition-all duration-300 cursor-pointer"
                 onClick={(e) => {

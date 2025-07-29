@@ -76,11 +76,11 @@ export function QuestionCard({ index, form, onRemove }: QuestionCardProps) {
           <div
             className={
               errors.questions?.[index]?.question?.message
-                ? "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-[23px] z-10 p-3 rounded-xl"
-                : "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-1/2 z-10 p-3 rounded-xl"
+                ? "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-[23px] z-10 p-3 rounded-lg"
+                : "bg-[#C1C1C140] transform -translate-y-1/2 absolute left-1 top-1/2 z-10 p-3 rounded-lg"
             }
           >
-            <HelpCircle className="text-gray-400 w-4 h-4" />
+            <HelpCircle className="text-black w-4 h-4" />
           </div>
           <InputField
             id={`questions.${index}.question`}
