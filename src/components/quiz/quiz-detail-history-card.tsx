@@ -43,7 +43,7 @@ const QuizDetailHistoryCard = ({ data }: any) => {
         </div>
 
         {/* Content Section */}
-        <div className="p-2.5">
+        <div className="p-3">
           <div className="flex justify-between items-center">
             <div>
               <div className="text-[16px] font-bold text-gray-800">

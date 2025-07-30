@@ -35,16 +35,16 @@ const QuizComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const loadingBool = useBoolean(true);
-  const [userRole, setUserRole] = useState('')
-  const [userId, setUserId] = useState('')
+  const [userRole, setUserRole] = useState("");
+  const [userId, setUserId] = useState("");
   useEffect(() => {
-    fetchUserRole()
-  }, [])
+    fetchUserRole();
+  }, []);
   const fetchUserRole = async () => {
     const authObj = await getCookie();
-    authObj?.userRole && setUserRole(authObj?.userRole)
-    authObj?.userId && setUserId(authObj?.userId)
-  }
+    authObj?.userRole && setUserRole(authObj?.userRole);
+    authObj?.userId && setUserId(authObj?.userId);
+  };
 
   const onload = useCallback(async () => {
     const authObj = await getCookie();
@@ -52,7 +52,7 @@ const QuizComponent = () => {
     const quizRes = (await getQuizList({
       search: searchTerm,
       date: currentDateToUTC(),
-      moderatorId: authObj?.userId ?? userId
+      moderatorId: authObj?.userId ?? userId,
     })) as any;
 
     setQuizListData(quizRes?.data?.upcoming);
@@ -77,7 +77,7 @@ const QuizComponent = () => {
           Upcoming Quiz
         </Typography>
         <div className="flex justify-around items-start sm:items-center gap-2 flex-col sm:flex-row">
-          <div className="relative w-full sm:w-[400px] bg-white">
+          <div className="relative w-full sm:w-[400px] bg-white rounded-lg">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <InputField
               placeholder="Search"
@@ -94,7 +94,7 @@ const QuizComponent = () => {
               }
             />
           </div>
-          {userRole === "admin" &&
+          {userRole === "admin" && (
             <AssignModeratorPopup>
               <GradientButton
                 fromGradient="from-[#71D561]"
@@ -103,13 +103,13 @@ const QuizComponent = () => {
                 View Moderator
               </GradientButton>
             </AssignModeratorPopup>
-          }
+          )}
 
-          {userRole === "admin" &&
+          {userRole === "admin" && (
             <Link color="inherit" href={paths.quiz_management.create}>
               <GradientButton>Create Quiz</GradientButton>
             </Link>
-          }
+          )}
         </div>
       </div>
       {loadingBool.bool ? (

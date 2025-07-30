@@ -10,6 +10,7 @@ import TextareaField from "@/components/shared/textarea-field/textarea-field";
 import ImageDropzone from "@/components/shared/dropzone/dropzone";
 import AssignModeratorPopup from "./assign-moderator-popup";
 import GradientTitle from "@/components/shared/gradient/gradient-title";
+import { useEffect } from "react";
 
 interface QuizDetailsProps {
   form: UseFormReturn<QuizFormValues>;
@@ -21,9 +22,35 @@ export function QuizDetails({ form }: QuizDetailsProps) {
     formState: { errors },
     watch,
     setValue,
+    setError,
+    clearErrors,
   } = form;
   const values = watch(); // returns all current form values
   console.log("values: ", values);
+
+  // Custom validation for date and time
+  useEffect(() => {
+    const date = watch("date");
+    const time = watch("time");
+    if (!date || !time) {
+      clearErrors(["date", "time"]);
+      return;
+    }
+    const selectedDateTime = new Date(`${date}T${time}`);
+    const now = new Date();
+    if (selectedDateTime <= now) {
+      setError("date", {
+        type: "manual",
+        message: "Please select a future date and time.",
+      });
+      setError("time", {
+        type: "manual",
+        message: "Please select a future date and time.",
+      });
+    } else {
+      clearErrors(["date", "time"]);
+    }
+  }, [watch("date"), watch("time"), setError, clearErrors]);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200">
@@ -60,6 +87,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
             label="Date"
             value={form.watch()?.date}
             setValue={form.setValue}
+            minDate={new Date()}
             error={errors?.date?.message}
           />
 
@@ -77,6 +105,11 @@ export function QuizDetails({ form }: QuizDetailsProps) {
               <input
                 id="time"
                 type="time"
+                min={
+                  values.date === new Date().toISOString().slice(0, 10)
+                    ? new Date().toTimeString().slice(0, 5)
+                    : undefined
+                }
                 {...register("time")}
                 className={cn(
                   "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-[13px] h-12",

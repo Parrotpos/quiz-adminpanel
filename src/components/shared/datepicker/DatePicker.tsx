@@ -21,6 +21,7 @@ interface CustomDatePickerProps {
   placeholder?: string;
   value?: Date | string;
   setValue?: UseFormSetValue<any>;
+  minDate?: Date;
 }
 
 const DatePicker: React.FC<CustomDatePickerProps> = ({
@@ -30,6 +31,7 @@ const DatePicker: React.FC<CustomDatePickerProps> = ({
   error,
   value,
   setValue,
+  minDate,
   placeholder = "Select",
 }) => {
   const [open, setOpen] = useState(false);
@@ -68,6 +70,15 @@ const DatePicker: React.FC<CustomDatePickerProps> = ({
             selected={value ? moment(value, "YYYY-MM-DD").toDate() : undefined}
             onSelect={handleSelect}
             captionLayout="dropdown"
+            disabled={(date) => {
+              if (!minDate) return false;
+              // Disable all dates before minDate (set time to 00:00:00 for both)
+              const d = new Date(date);
+              d.setHours(0, 0, 0, 0);
+              const min = new Date(minDate);
+              min.setHours(0, 0, 0, 0);
+              return d < min;
+            }}
           />
         </PopoverContent>
       </Popover>

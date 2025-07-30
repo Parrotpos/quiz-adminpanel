@@ -50,7 +50,7 @@ const QuizDetailCard = ({ data, userRole }: any) => {
       </div>
 
       {/* Content Section */}
-      <div className="p-2">
+      <div className="p-3">
         <div className="flex justify-between items-center">
           <div>
             <div className="text-[14px] font-semibold text-gray-800 text-ellipsis overflow-hidden line-clamp-1">

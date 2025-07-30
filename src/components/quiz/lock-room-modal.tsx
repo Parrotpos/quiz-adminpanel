@@ -70,16 +70,17 @@ export default function LockRoomModal({
           </p>
 
           {/* Action Buttons */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 px-5">
             <Button
+              type="button"
               variant="outline"
-              className="flex-1 h-12 text-[#0E76BC] border-[#0E76BC] hover:text-[#0E76BC]"
               onClick={() => onOpenChange(false)}
+              className="font-bold px-8 h-11 py-5 w-1/2 text-[#0E76BC] border-2 border-[#0E76BC] hover:text-[#0E76BC]"
             >
               Cancel
             </Button>
             <GradientButton
-              className="flex-1 h-12"
+              className="flex-1 h-11"
               onClick={() => handleUnlockRoom()}
             >
               Lock Room

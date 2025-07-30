@@ -40,44 +40,59 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    loadingBool.onTrue();
-    if (isAdmin) {
-      const loginRes = (await adminNextLoginService(data, isAdmin)) as IDefaultResponse;
+    try {
+      loadingBool.onTrue();
+      if (isAdmin) {
+        const loginRes = (await adminNextLoginService(
+          data,
+          isAdmin
+        )) as IDefaultResponse;
+        console.log("loginRes: ", loginRes);
 
-      if (Number(loginRes?.status) === 200 && loginRes?.token) {
-        await setAuthCookie({
-          token: loginRes?.token as string,
-          userRole: "admin"
-        }); // Cookie is now securely stored
-        await checkUserSession();
-      }
+        if (Number(loginRes?.status) === 200 && loginRes?.token) {
+          await setAuthCookie({
+            token: loginRes?.token as string,
+            userRole: "admin",
+          }); // Cookie is now securely stored
+          await checkUserSession();
+        }
 
-      if (loginRes.status) {
-        router.push(paths.quiz_management.root);
+        if (loginRes.status) {
+          router.push(paths.quiz_management.root);
+        } else {
+          toast.error(loginRes?.message);
+        }
       } else {
-        toast.error(loginRes?.message);
-      }
-    } else {
-      const loginRes = (await moderatorNextLoginService(data, isAdmin)) as IDefaultResponse;
-      if (Number(loginRes?.status) === 200 && loginRes?.token) {
-        console.log('loginRes: ', loginRes);
-        console.log('loginRes.data._id: ', loginRes.data._id);
-        await setAuthCookie({
-          token: loginRes?.token as string,
-          userRole: "moderator",
-          fullName: loginRes.data.fullName,
-          userId: loginRes.data._id
-        }); // Cookie is now securely stored
-        await checkUserSession();
-      }
+        const loginRes = (await moderatorNextLoginService(
+          data,
+          isAdmin
+        )) as IDefaultResponse;
+        if (Number(loginRes?.status) === 200 && loginRes?.token) {
+          console.log("loginRes: ", loginRes);
+          console.log("loginRes.data._id: ", loginRes.data._id);
+          await setAuthCookie({
+            token: loginRes?.token as string,
+            userRole: "moderator",
+            fullName: loginRes.data.fullName,
+            userId: loginRes.data._id,
+          }); // Cookie is now securely stored
+          await checkUserSession();
+        }
 
-      if (loginRes.status) {
-        router.push(paths.quiz_management.root);
-      } else {
-        toast.error(loginRes?.message);
+        if (loginRes.status) {
+          router.push(paths.quiz_management.root);
+        } else {
+          toast.error(loginRes?.message);
+        }
       }
+      loadingBool.onFalse();
+    } catch (error) {
+      console.error("Login error: ", error);
+      loadingBool.onFalse();
+      toast.error("An error occurred during login. Please try again.");
+    } finally {
+      loadingBool.onFalse();
     }
-    loadingBool.onFalse();
   };
 
   return (

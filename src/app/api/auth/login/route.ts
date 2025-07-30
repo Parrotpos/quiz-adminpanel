@@ -5,14 +5,28 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const body = await req.json();
-
-  const response = await axios.post(endpoints.auth.login, body, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return NextResponse.json(response.data, {
-    status: response.status,
-  });
+  try {
+    const response = await axios.post(endpoints.auth.login, body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("response: ", response);
+    return NextResponse.json(response.data, {
+      status: response.status,
+    });
+  } catch (error: any) {
+    // If error response exists, return its status and data
+    console.log("error.response: ", error);
+    if (error.response) {
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
+    }
+    // Fallback for unknown errors
+    return NextResponse.json(
+      { message: error.message || "An error occurred" },
+      { status: error.status ?? 500 }
+    );
+  }
 }

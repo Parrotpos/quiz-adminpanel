@@ -84,23 +84,24 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
               id="url"
               placeholder="Add URL here..."
               {...register("url")}
+              className="h-12"
             />
             {errors.url && (
               <p className="text-sm text-red-500 mt-2">{errors.url.message}</p>
             )}
           </div>
-          <div className="w-full flex justify-center gap-4 pt-4">
+          <div className="w-full flex justify-center gap-4 pt-4 px-7">
             <Button
-              variant="outline"
-              className="w-1/2 cursor-pointer border-[#0E76BC] text-[#0E76BC]"
-              onClick={() => onOpenChange(false)}
               type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="font-bold px-8 h-11 py-5 w-1/2 text-[#0E76BC] border-2 border-[#0E76BC] hover:text-[#0E76BC]"
             >
               Cancel
             </Button>
             <GradientButton
               type="submit"
-              className="w-1/2 cursor-pointer"
+              className="w-1/2 cursor-pointer h-11"
               loading={loadingBool.bool}
             >
               Save
