@@ -35,10 +35,10 @@ const QuizCardKkeleton: React.FC<QuizCardSkeletonProps> = ({
       {/* Bottom section */}
       <div className="px-4 py-3 flex justify-between items-center">
         <div>
-          <Skeleton className="h-5 w-32 mb-1" />
+          <Skeleton className="h-5 w-32 mb-1 rounded-[4px]" />
           <div className="flex items-center gap-2">
             <Skeleton className="h-4 w-4 rounded-full" />
-            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-20 rounded-[4px]" />
           </div>
         </div>
 
