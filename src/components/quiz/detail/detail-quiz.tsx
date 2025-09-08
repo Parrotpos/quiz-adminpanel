@@ -79,7 +79,11 @@ export default function QuizDetail({ id }: { id: string }) {
 
     console.log("onShowAnswerClick: ", id);
   };
-
+  const onLeaveQuiz = () => {
+    socket.emit("leave_quiz", {
+      quizId: id,
+    });
+  };
   const onCompleteQuiz = () => {
     socket.emit("complete_quiz", {
       quizId: id,
@@ -354,6 +358,12 @@ export default function QuizDetail({ id }: { id: string }) {
             Complete quiz
           </GradientButton>
         </WinnerPopup>
+        <GradientButton
+          className="text-white px-6 mt-5"
+          onClick={() => onLeaveQuiz()}
+        >
+          Leave quiz
+        </GradientButton>
       </div>
       <LockRoomModal
         open={lockRoomModalOpen}
