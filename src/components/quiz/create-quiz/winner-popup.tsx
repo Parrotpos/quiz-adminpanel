@@ -50,7 +50,7 @@ export default function WinnerPopup({
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
                 setIsOpen(false);
-                router.push(paths.quiz_management.root);
+                // router.push(paths.quiz_management.root);
               }}
             />
           </div>
