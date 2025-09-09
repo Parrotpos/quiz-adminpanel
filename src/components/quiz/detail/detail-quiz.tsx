@@ -80,9 +80,15 @@ export default function QuizDetail({ id }: { id: string }) {
     console.log("onShowAnswerClick: ", id);
   };
   const onLeaveQuiz = () => {
-    socket.emit("leave_quiz", {
-      quizId: id,
-    });
+    try {
+      socket.emit("leave_quiz", {
+        quizId: id,
+      });
+      console.log("call leave");
+      router.push('/quiz-management')
+    } catch (error) {
+      console.log('error: ', error);
+    }
   };
   const onCompleteQuiz = () => {
     socket.emit("complete_quiz", {
@@ -176,13 +182,13 @@ export default function QuizDetail({ id }: { id: string }) {
                 <div className="flex -space-x-2">
                   {topUsers.length
                     ? topUsers.map((player) => (
-                        <img
-                          key={player.userId}
-                          src={player.pic || "/images/user.jpg"}
-                          alt={player.username}
-                          className="w-8 h-8 rounded-full border-2 border-white"
-                        />
-                      ))
+                      <img
+                        key={player.userId}
+                        src={player.pic || "/images/user.jpg"}
+                        alt={player.username}
+                        className="w-8 h-8 rounded-full border-2 border-white"
+                      />
+                    ))
                     : "-"}
                 </div>
               </div>
@@ -230,8 +236,8 @@ export default function QuizDetail({ id }: { id: string }) {
                         totalAnnouncements === 0
                           ? totalQuestions
                           : totalQuestions >= totalAnnouncements
-                          ? Math.ceil(totalQuestions / totalAnnouncements)
-                          : 1;
+                            ? Math.ceil(totalQuestions / totalAnnouncements)
+                            : 1;
 
                       let annIndex = 0;
 
@@ -244,9 +250,9 @@ export default function QuizDetail({ id }: { id: string }) {
                             key={`q-${num}`}
                             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
                               num === isShowCount
-                                ? "bg-green-500 text-white"
-                                : "bg-gray-100 text-gray-400"
-                            }`}
+                              ? "bg-green-500 text-white"
+                              : "bg-gray-100 text-gray-400"
+                              }`}
                           >
                             {num < isShowCount ? (
                               <img
@@ -325,24 +331,24 @@ export default function QuizDetail({ id }: { id: string }) {
                   <div className="px-3 py-1">
                     {quizData?.AnnouncementQuiz?.length > 0
                       ? quizData?.AnnouncementQuiz.map(
-                          (obj: any, idx: number) => {
-                            return (
-                              <div
-                                key={idx}
-                                className="bg-[#f5f5f5] p-3 mb-3 rounded-lg"
-                              >
-                                <p>
-                                  <strong className="text-gray-900 text-sm">
-                                    {obj?.title}
-                                  </strong>
-                                </p>
-                                <p className="text-xs mt-1">
-                                  {obj?.description}
-                                </p>
-                              </div>
-                            );
-                          }
-                        )
+                        (obj: any, idx: number) => {
+                          return (
+                            <div
+                              key={idx}
+                              className="bg-[#f5f5f5] p-3 mb-3 rounded-lg"
+                            >
+                              <p>
+                                <strong className="text-gray-900 text-sm">
+                                  {obj?.title}
+                                </strong>
+                              </p>
+                              <p className="text-xs mt-1">
+                                {obj?.description}
+                              </p>
+                            </div>
+                          );
+                        }
+                      )
                       : "Not found"}
                   </div>
                 </div>
@@ -359,7 +365,7 @@ export default function QuizDetail({ id }: { id: string }) {
           </GradientButton>
         </WinnerPopup>
         <GradientButton
-          className="text-white px-6 mt-5"
+          className="text-white px-6 mt-5 ml-3"
           onClick={() => onLeaveQuiz()}
         >
           Leave quiz
