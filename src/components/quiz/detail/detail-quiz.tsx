@@ -124,6 +124,7 @@ export default function QuizDetail({ id }: { id: string }) {
                 onClick={() =>
                   router.push(paths.quiz_management.add_question(id))
                 }
+                disabled={winnerList.length > 0}
               >
                 Add Question
               </GradientButton>
@@ -213,6 +214,7 @@ export default function QuizDetail({ id }: { id: string }) {
                     onHide={onHide}
                     quizData={quizData}
                     questionNo={index + 1}
+                    winnerList={winnerList}
                   />
                 );
               })}
@@ -360,6 +362,7 @@ export default function QuizDetail({ id }: { id: string }) {
           <GradientButton
             className="text-white px-6 mt-5"
             onClick={() => onCompleteQuiz()}
+            disabled={winnerList.length > 0}
           >
             Complete quiz
           </GradientButton>

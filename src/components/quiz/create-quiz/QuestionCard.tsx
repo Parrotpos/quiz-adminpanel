@@ -15,6 +15,7 @@ interface QuestionCardProps {
   onHide: (questionId: string) => void;
   quizData: any;
   questionNo: number;
+  winnerList: any[];
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -26,6 +27,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onHide,
   quizData,
   questionNo,
+  winnerList,
 }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   console.log(question, "question: ");
@@ -51,6 +53,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             <Eye
               className="h-5 w-5 text-gray-600 cursor-pointer"
               onClick={() => {
+                if (winnerList.length > 0) {
+                  // alert("You have already selected the winner for this quiz.");
+                  return;
+                }
                 onHide(question._id);
               }}
             />
@@ -99,6 +105,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               onShowQuestionClick={onShowQuestionClick}
               onShowAnswerClick={onShowAnswerClick}
               quizData={quizData}
+              winnerList={winnerList}
             />
           </div>
         </div>

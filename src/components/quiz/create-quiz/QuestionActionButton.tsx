@@ -14,6 +14,7 @@ interface QuestionActionButtonProps {
   onShowQuestionClick: (id: string) => void;
   onShowAnswerClick: (id: string) => void;
   quizData: any;
+  winnerList: any[];
 }
 
 const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
@@ -23,6 +24,7 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
   onShowQuestionClick,
   onShowAnswerClick,
   quizData,
+  winnerList,
 }) => {
   const [diffSeconds, setDiffSeconds] = useState<number>(NaN);
   const [count, setCount] = useState<number>(NaN);
@@ -77,6 +79,7 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
           toGradient="to-[#00A32E]"
           className="text-white px-4 h-[30px] text-[12px]"
           onClick={() => onShowQuestionClick(questionId)}
+          disabled={winnerList.length > 0}
         >
           Show Question
         </GradientButton>
