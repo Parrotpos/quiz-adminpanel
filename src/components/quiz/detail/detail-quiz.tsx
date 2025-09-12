@@ -57,7 +57,6 @@ export default function QuizDetail({ id }: { id: string }) {
     socket.emit("show_question", {
       quizId: id,
       questionId: questionId,
-      // questionCountdown: quizData?.questionCountdown,
     });
     // const moderatorRes = (await showQuestion({
     //   quizId: id,
