@@ -115,19 +115,17 @@ export default function QuizDetail({ id }: { id: string }) {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-lg font-bold text-gray-900">Quiz Details</h1>
           <div className="flex gap-3">
-            <Link href={paths.quiz_management.add_question(id)}>
-              <GradientButton
-                fromGradient="from-[#71D561]"
-                toGradient="to-[#00A32E]"
-                className="text-white px-6 cursor-pointer"
-                onClick={() =>
-                  router.push(paths.quiz_management.add_question(id))
-                }
-                disabled={winnerList.length > 0}
-              >
-                Add Question
-              </GradientButton>
-            </Link>
+            <GradientButton
+              fromGradient="from-[#71D561]"
+              toGradient="to-[#00A32E]"
+              className="text-white px-6 cursor-pointer"
+              onClick={() =>
+                router.push(paths.quiz_management.add_question(id))
+              }
+              disabled={winnerList.length > 0 || lstQuestion?.length < 0}
+            >
+              Add Question
+            </GradientButton>
             <GradientButton
               className="text-white px-6"
               onClick={() => setLockRoomModalOpen(true)}
@@ -357,11 +355,14 @@ export default function QuizDetail({ id }: { id: string }) {
             </div>
           </div>
         </div>
-        <WinnerPopup winnerList={winnerList}>
+        <WinnerPopup
+          winnerList={winnerList}
+          disabled={winnerList.length > 0 || lstQuestion?.length < 0}
+        >
           <GradientButton
             className="text-white px-6 mt-5"
             onClick={() => onCompleteQuiz()}
-            disabled={winnerList.length > 0}
+            disabled={winnerList.length > 0 || lstQuestion?.length < 0}
           >
             Complete quiz
           </GradientButton>

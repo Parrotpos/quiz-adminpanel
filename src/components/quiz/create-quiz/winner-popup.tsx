@@ -8,11 +8,13 @@ import { CircleX } from "lucide-react";
 interface WinnerPopupProps {
   children?: ReactNode;
   winnerList: any[];
+  disabled?: boolean;
 }
 
 export default function WinnerPopup({
   children,
   winnerList,
+  disabled,
 }: WinnerPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -23,8 +25,8 @@ export default function WinnerPopup({
 
   return (
     <div className="inline-block">
-      <div 
-        onClick={() => setIsOpen(true)} 
+      <div
+        onClick={() => (disabled ? setIsOpen(true) : null)}
         className="inline-block w-auto"
       >
         {children && children}
