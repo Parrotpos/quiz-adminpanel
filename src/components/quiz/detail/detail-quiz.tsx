@@ -90,6 +90,7 @@ export default function QuizDetail({ id }: { id: string }) {
     }
   };
   const onCompleteQuiz = () => {
+    if (winnerList.length > 0 || lstQuestion.length === 0) return;
     socket.emit("complete_quiz", {
       quizId: id,
     });
@@ -122,7 +123,7 @@ export default function QuizDetail({ id }: { id: string }) {
               onClick={() =>
                 router.push(paths.quiz_management.add_question(id))
               }
-              disabled={winnerList.length > 0 || lstQuestion?.length < 0}
+              disabled={winnerList.length > 0 || lstQuestion?.length <= 0}
             >
               Add Question
             </GradientButton>
@@ -357,12 +358,12 @@ export default function QuizDetail({ id }: { id: string }) {
         </div>
         <WinnerPopup
           winnerList={winnerList}
-          disabled={winnerList.length > 0 || lstQuestion?.length < 0}
+          disabled={winnerList.length > 0 || lstQuestion?.length <= 0}
         >
           <GradientButton
             className="text-white px-6 mt-5"
             onClick={() => onCompleteQuiz()}
-            disabled={winnerList.length > 0 || lstQuestion?.length < 0}
+            disabled={winnerList.length > 0 || lstQuestion?.length <= 0}
           >
             Complete quiz
           </GradientButton>

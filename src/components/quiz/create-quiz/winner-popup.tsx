@@ -20,13 +20,14 @@ export default function WinnerPopup({
   const router = useRouter();
 
   useEffect(() => {
-    if (winnerList?.length) setIsOpen(true);
+    if (winnerList?.length && !disabled) setIsOpen(true);
+    else setIsOpen(false);
   }, [winnerList]);
 
   return (
     <div className="inline-block">
       <div
-        onClick={() => (disabled ? setIsOpen(true) : null)}
+        onClick={() => (!disabled ? setIsOpen(true) : null)}
         className="inline-block w-auto"
       >
         {children && children}
@@ -35,9 +36,9 @@ export default function WinnerPopup({
         open={isOpen}
         onOpenChange={(open) => {
           setIsOpen(open);
-          if (!open) {
-            router.push(paths.quiz_management.root);
-          }
+          // if (!open) {
+          //   router.push(paths.quiz_management.root);
+          // }
         }}
       >
         <DialogContent
