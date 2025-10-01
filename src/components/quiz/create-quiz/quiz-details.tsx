@@ -10,6 +10,7 @@ import TextareaField from "@/components/shared/textarea-field/textarea-field";
 import ImageDropzone from "@/components/shared/dropzone/dropzone";
 import AssignModeratorPopup from "./assign-moderator-popup";
 import GradientTitle from "@/components/shared/gradient/gradient-title";
+import { Switch } from "@/components/ui/switch";
 import { useEffect } from "react";
 
 interface QuizDetailsProps {
@@ -143,6 +144,42 @@ export function QuizDetails({ form }: QuizDetailsProps) {
             ]}
             error={errors?.joinType?.message ?? ""}
           />
+        </div>
+
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <label className="text-[12px] font-medium text-gray-700">
+              Is Free Quiz?
+            </label>
+            <Switch
+              checked={watch("isFree")}
+              onCheckedChange={(checked) => {
+                setValue("isFree", checked, {
+                  shouldValidate: true,
+                  shouldTouch: true,
+                  shouldDirty: true,
+                });
+                // Clear amount when switching to free
+                if (checked) {
+                  setValue("amount", 0);
+                }
+              }}
+            />
+          </div>
+
+          {!watch("isFree") && (
+            <div className="mb-4">
+              <InputField
+                label="Amount"
+                id="amount"
+                name="amount"
+                register={register}
+                placeholder="Enter Amount"
+                error={errors?.amount?.message}
+                type="number"
+              />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">

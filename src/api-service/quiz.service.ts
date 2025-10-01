@@ -66,3 +66,19 @@ export const notifyUser = (data: any) => {
     data,
   });
 };
+
+export const getQuizParticipants = (quizId: string) => {
+  return apiClient(`${endpoints.quiz.next_participants}/${quizId}`, {
+    method: "GET",
+  });
+};
+
+export const setQuizWinners = (data: {
+  quizId: string;
+  participantIds: string[];
+}) => {
+  return apiClient(endpoints.quiz.next_winners, {
+    method: "POST",
+    data,
+  });
+};

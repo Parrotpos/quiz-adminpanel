@@ -69,6 +69,8 @@ const EditQuiz = ({ quizId }: EditQuizProps) => {
                 ...quizData,
                 date: quizData?.scheduledDate ?? "",
                 image: quizData?.image || "",
+                isFree: quizData?.isFree ?? false,
+                amount: quizData?.amount ?? 0,
               }
             : {}
         }

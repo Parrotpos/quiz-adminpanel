@@ -38,6 +38,8 @@ export const quizSchema = z
       errorMap: () => ({ message: "Join type is required" }),
     }),
     maxUsers: z.coerce.number().optional(), // make optional for now
+    isFree: z.boolean().default(false),
+    amount: z.coerce.number().optional(),
     quizPrice: z.coerce.string().min(0, "Please enter valid quiz price"),
     questionCountdown: z.coerce
       .number()
@@ -66,7 +68,25 @@ export const quizSchema = z
         ctx.addIssue({
           path: ["maxUsers"],
           code: z.ZodIssueCode.custom,
-          message: "Max users must be greater than 0 when join type is restricted",
+          message:
+            "Max users must be greater than 0 when join type is restricted",
+        });
+      }
+    }
+
+    // Conditional validation for amount when isFree is false
+    if (!data.isFree) {
+      if (data.amount === undefined || isNaN(data.amount)) {
+        ctx.addIssue({
+          path: ["amount"],
+          code: z.ZodIssueCode.custom,
+          message: "Amount is required when quiz is not free",
+        });
+      } else if (data.amount <= 0) {
+        ctx.addIssue({
+          path: ["amount"],
+          code: z.ZodIssueCode.custom,
+          message: "Amount must be greater than 0 when quiz is not free",
         });
       }
     }

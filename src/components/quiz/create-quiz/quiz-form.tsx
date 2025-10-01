@@ -29,6 +29,8 @@ const QuizForm: React.FC<{
     time: "",
     joinType: "unlimited",
     maxUsers: 0,
+    isFree: false,
+    amount: 0,
     quizPrice: 0,
     questionCountdown: 10,
     description: "",
@@ -71,8 +73,7 @@ const QuizForm: React.FC<{
     Object.entries(actualVals).forEach(([key, value]) => {
       if (key === "date") {
         formData.append(key, moment(value).format("YYYY-MM-DD"));
-      }
-      else if (key === "questions") {
+      } else if (key === "questions") {
         // Send entire questions array as JSON
         formData.append(key, JSON.stringify(value));
       } else if (value instanceof File) {
@@ -108,7 +109,7 @@ const QuizForm: React.FC<{
     } catch (error) {
       toast.error(
         (error as Error)?.message ||
-        "Failed to create/update quiz. Please try again."
+          "Failed to create/update quiz. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -147,8 +148,8 @@ const QuizForm: React.FC<{
                 ? "Updating.."
                 : "Creating..."
               : editQuizHandler
-                ? "Update"
-                : "Next"}
+              ? "Update"
+              : "Next"}
           </GradientButton>
         </div>
       </form>

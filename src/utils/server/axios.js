@@ -46,6 +46,12 @@ export const endpoints = {
     announcement_create: ADMIN_BASE_PATH + "/quiz/add-announcement",
     next_notify_user: "/api/quiz/notification",
     notify_user: ADMIN_BASE_PATH + "/quiz/notification",
+
+    // Participants and Winners
+    next_participants: "/api/quiz/participant",
+    participants: ADMIN_BASE_PATH + "/quiz/participant",
+    next_winners: "/api/quiz/winner",
+    winners: ADMIN_BASE_PATH + "/quiz/winner",
   },
   moderator: {
     next_create: "/api/moderator/create",

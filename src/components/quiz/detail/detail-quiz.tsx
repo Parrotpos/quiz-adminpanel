@@ -10,10 +10,12 @@ import QuestionCard from "../create-quiz/QuestionCard";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes/path";
 import WinnerPopup from "../create-quiz/winner-popup";
+import WinnerSelectionPopup from "./winner-selection-popup";
 import GradientTitle from "@/components/shared/gradient/gradient-title";
 import GradientButton from "@/components/molecules/gradient-button/gradient-button";
 import Link from "next/link";
 import TextHeader1 from "@/components/TextHeader1";
+import { setQuizWinners } from "@/api-service/quiz.service";
 
 export default function QuizDetail({ id }: { id: string }) {
   const socket = getSocket();
@@ -21,6 +23,7 @@ export default function QuizDetail({ id }: { id: string }) {
     [key: number]: string;
   }>({});
   const [lockRoomModalOpen, setLockRoomModalOpen] = useState(false);
+  const [winnerSelectionOpen, setWinnerSelectionOpen] = useState(false);
   const [quizData, setQuizData] = useState<any>({});
 
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
@@ -91,9 +94,28 @@ export default function QuizDetail({ id }: { id: string }) {
   };
   const onCompleteQuiz = () => {
     if (winnerList.length > 0 || lstQuestion.length === 0) return;
-    socket.emit("complete_quiz", {
-      quizId: id,
-    });
+    // Open winner selection popup instead of directly completing
+    setWinnerSelectionOpen(true);
+  };
+
+  const handleWinnersSelected = async (winnerIds: string[]) => {
+    try {
+      // Call the winner API with selected participant IDs
+      const response = await setQuizWinners({
+        quizId: id,
+        participantIds: winnerIds,
+      });
+
+      console.log("Winners set successfully:", response);
+
+      // Complete the quiz after setting winners
+      socket.emit("complete_quiz", {
+        quizId: id,
+      });
+    } catch (error) {
+      console.error("Error setting winners:", error);
+      // You can add toast notification here for error handling
+    }
   };
   const onHide = (questionId: string) => {
     socket.emit("hide_question", {
@@ -356,18 +378,13 @@ export default function QuizDetail({ id }: { id: string }) {
             </div>
           </div>
         </div>
-        <WinnerPopup
-          winnerList={winnerList}
+        <GradientButton
+          className="text-white px-6 mt-5"
+          onClick={() => onCompleteQuiz()}
           disabled={winnerList.length > 0 || lstQuestion?.length <= 0}
         >
-          <GradientButton
-            className="text-white px-6 mt-5"
-            onClick={() => onCompleteQuiz()}
-            disabled={winnerList.length > 0 || lstQuestion?.length <= 0}
-          >
-            Complete quiz
-          </GradientButton>
-        </WinnerPopup>
+          Complete quiz
+        </GradientButton>
         <GradientButton
           className="text-white px-6 mt-5 ml-3"
           onClick={() => onLeaveQuiz()}
@@ -379,6 +396,13 @@ export default function QuizDetail({ id }: { id: string }) {
         open={lockRoomModalOpen}
         onOpenChange={setLockRoomModalOpen}
         id={id}
+      />
+
+      <WinnerSelectionPopup
+        open={winnerSelectionOpen}
+        onOpenChange={setWinnerSelectionOpen}
+        quizId={id}
+        onWinnersSelected={handleWinnersSelected}
       />
     </div>
   );
