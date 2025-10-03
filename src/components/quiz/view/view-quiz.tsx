@@ -103,6 +103,10 @@ export default function ViewQuiz({ id }: { id: string }) {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <CardItem
+                  title="Quiz Price"
+                  description={quizData?.amount || "Free"}
+                />
+                <CardItem
                   title="Prize Pool"
                   description={quizData?.quizPrice}
                 />

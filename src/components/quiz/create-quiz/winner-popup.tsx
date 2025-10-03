@@ -22,7 +22,7 @@ export default function WinnerPopup({
   useEffect(() => {
     if (winnerList?.length && !disabled) setIsOpen(true);
     else setIsOpen(false);
-  }, [winnerList]);
+  }, [winnerList, disabled]);
 
   return (
     <div className="inline-block">

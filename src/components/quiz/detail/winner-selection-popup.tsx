@@ -82,7 +82,8 @@ export default function WinnerSelectionPopup({
       // Using the Next.js API route which can be easily switched to actual backend later
       const response = await fetch(`/api/quiz/participant/${quizId}`);
       const data = await response.json();
-      setParticipants(data.participants || []);
+      console.log("data: ", data);
+      setParticipants(data.data.participants || []);
 
       // TODO: When you're ready to use the actual backend API, uncomment this:
       // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/admin/quiz/participant/${quizId}`);

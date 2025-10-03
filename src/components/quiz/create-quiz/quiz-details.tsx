@@ -146,8 +146,9 @@ export function QuizDetails({ form }: QuizDetailsProps) {
           />
         </div>
 
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-4">
+        <div className="grid grid-cols-2 gap-4 mb-4 items-center">
+          {/* Is Free Quiz? Section - Half width */}
+          <div className="flex items-center  gap-3">
             <label className="text-[12px] font-medium text-gray-700">
               Is Free Quiz?
             </label>
@@ -167,19 +168,20 @@ export function QuizDetails({ form }: QuizDetailsProps) {
             />
           </div>
 
-          {!watch("isFree") && (
-            <div className="mb-4">
+          {/* Quiz Amount Section - Half width */}
+          <div>
+            {!watch("isFree") && (
               <InputField
-                label="Amount"
+                label="Quiz Amount"
                 id="amount"
                 name="amount"
                 register={register}
-                placeholder="Enter Amount"
+                placeholder="Enter Quiz Amount"
                 error={errors?.amount?.message}
                 type="number"
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
@@ -197,11 +199,11 @@ export function QuizDetails({ form }: QuizDetailsProps) {
           )}
           <div>
             <InputField
-              label="Quiz Price"
+              label="Winner Price"
               id="quizPrice"
               name="quizPrice"
               register={register}
-              placeholder="Enter Quiz Price"
+              placeholder="Enter Winner Price"
               error={errors?.quizPrice?.message}
             />
           </div>

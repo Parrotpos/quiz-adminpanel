@@ -16,6 +16,7 @@ import GradientButton from "@/components/molecules/gradient-button/gradient-butt
 import Link from "next/link";
 import TextHeader1 from "@/components/TextHeader1";
 import { setQuizWinners } from "@/api-service/quiz.service";
+import { toast } from "sonner";
 
 export default function QuizDetail({ id }: { id: string }) {
   const socket = getSocket();
@@ -31,6 +32,7 @@ export default function QuizDetail({ id }: { id: string }) {
   const [activePlayers, setActivePlayers] = useState<number>(0);
   const [eliminatedPlayers, setEliminatedPlayers] = useState<number>(0);
   const [winnerList, setWinnerList] = useState<any[]>([]);
+  console.log("winnerList: 654", winnerList);
   const [topUsers, setTopUsers] = useState<any[]>([]);
   const [lstQuestion, setLstQuestion] = useState<any[]>([]);
   const [isShowCount, setIsShowCount] = useState(0);
@@ -108,13 +110,32 @@ export default function QuizDetail({ id }: { id: string }) {
 
       console.log("Winners set successfully:", response);
 
+      // Show success toast with winner information
+      if (response?.status && response?.data) {
+        const { winnersCount, winners } = response.data;
+        const winnerNames = winners
+          ?.map((winner: any) => winner.username)
+          .join(", ");
+
+        toast.success(
+          `${
+            response.data.message || "Winners updated successfully!"
+          } \n${winnersCount} winner(s): ${winnerNames}`,
+          {
+            duration: 5000,
+          }
+        );
+      } else {
+        toast.success("Winners updated successfully!");
+      }
+
       // Complete the quiz after setting winners
       socket.emit("complete_quiz", {
         quizId: id,
       });
     } catch (error) {
       console.error("Error setting winners:", error);
-      // You can add toast notification here for error handling
+      toast.error("Failed to set winners. Please try again.");
     }
   };
   const onHide = (questionId: string) => {
@@ -378,6 +399,11 @@ export default function QuizDetail({ id }: { id: string }) {
             </div>
           </div>
         </div>
+        <WinnerPopup
+          winnerList={winnerList}
+          disabled={winnerList.length === 0}
+        ></WinnerPopup>
+
         <GradientButton
           className="text-white px-6 mt-5"
           onClick={() => onCompleteQuiz()}

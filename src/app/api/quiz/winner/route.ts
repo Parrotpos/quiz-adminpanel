@@ -1,61 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
+export const config = {
+  runtime: "nodejs",
+};
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { quizId, participantIds } = body;
+import { endpoints } from "@/utils/server/axios";
+import { apiCall, authorizeAction } from "src/lib/middleware/authorizeAction";
 
-    if (!quizId || !participantIds || !Array.isArray(participantIds)) {
-      return NextResponse.json(
-        { error: "quizId and participantIds array are required" },
-        { status: 400 }
-      );
-    }
+export const POST = authorizeAction(async (_req, context) => {
+  const { form } = context;
+  const { quizId, participantIds } = form;
 
-    // TODO: Replace this with actual API call to your backend
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/quiz/winner`,
+  if (!quizId || !participantIds || !Array.isArray(participantIds)) {
+    return Response.json(
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Add authorization headers as needed
-        },
-        body: JSON.stringify({
-          quizId,
-          participantIds,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to set winners");
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data);
-
-    // Dummy response for now - matches the structure from your API image
-    // const dummyResponse = {
-    //   message: "Winners updated successfully",
-    //   winnersCount: participantIds.length,
-    //   winners: participantIds.map((id, index) => ({
-    //     userId: id,
-    //     username: index === 0 ? "MAVANI" : "ROMIL",
-    //     scored: index === 0 ? 3 : 3,
-    //     win: "100",
-    //   })),
-    //   quizId: quizId,
-    // };
-
-    // console.log("Setting winners for quiz:", quizId, "Winners:", participantIds);
-
-    // return NextResponse.json(dummyResponse);
-  } catch (error) {
-    console.error("Error setting winners:", error);
-    return NextResponse.json(
-      { error: "Failed to set winners" },
-      { status: 500 }
+        status: false,
+        message: "quizId and participantIds array are required",
+        statusCode: 400,
+      },
+      { status: 400 }
     );
   }
-}
+
+  const result = await apiCall({
+    url: endpoints.quiz.winners,
+    method: "put",
+    data: {
+      quizId,
+      participantIds,
+    },
+  });
+
+  console.log("result: p02", result);
+  return Response.json(result, { status: result.statusCode });
+});
