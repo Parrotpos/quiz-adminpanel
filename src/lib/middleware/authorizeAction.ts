@@ -7,9 +7,8 @@ import { verifyJwt } from "@/auth/context/jwt/utils";
 import { RouteModuleHandleContext } from "next/dist/server/route-modules/route-module";
 
 export const authorizeAction = (handler: HandlerFn) => {
-  return async (req: NextRequest, ctx): Promise<NextResponse> => {
-    const resolvedCtx = await ctx;
-    const paramsFromReq = await resolvedCtx.params;
+  return async (req: NextRequest, ctx: RouteHandlerContext): Promise<NextResponse> => {
+    const paramsFromReq = await ctx.params;
 
     const authObj = await getCookie();
 

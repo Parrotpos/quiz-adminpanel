@@ -18,6 +18,10 @@ declare global {
     ...args: any[]
   ) => Promise<Response | NextResponse>;
 
+  type RouteHandlerContext = {
+    params: Promise<any>;
+  };
+
   type ApiCallProps = {
     url: string;
     data?: Record<string, any>;
