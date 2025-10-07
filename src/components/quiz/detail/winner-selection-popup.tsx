@@ -280,7 +280,7 @@ export default function WinnerSelectionPopup({
                         <SortButton field="phone">Phone Number</SortButton>
                       </th>
                       <th className="p-2 sm:p-3 lg:p-4 text-left min-w-[60px] sm:w-24 lg:w-32 xl:w-40">
-                        <SortButton field="score">Score</SortButton>
+                        <SortButton field="scored">Score</SortButton>
                       </th>
                       <th className="p-2 sm:p-3 lg:p-4 text-left min-w-[120px] sm:w-40 lg:w-48 xl:w-56">
                         <SortButton field="lastTransactionTotal">
