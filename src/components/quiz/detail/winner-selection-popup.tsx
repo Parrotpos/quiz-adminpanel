@@ -359,7 +359,7 @@ export default function WinnerSelectionPopup({
                           {participant.phone || "-"}
                         </td>
                         <td className="p-2 sm:p-3 lg:p-4 font-bold text-center text-blue-600 text-sm sm:text-base lg:text-lg">
-                          {participant.score}
+                          {participant.scored}
                         </td>
                         <td
                           className={`p-2 sm:p-3 lg:p-4 font-semibold text-center text-xs sm:text-sm lg:text-base ${
@@ -368,7 +368,7 @@ export default function WinnerSelectionPopup({
                               : "text-green-600"
                           }`}
                         >
-                          ₹{participant.lastTransactionTotal}
+                          RM. {participant.lastTransactionTotal}
                         </td>
                         <td
                           className={`p-2 sm:p-3 lg:p-4 font-semibold text-center text-xs sm:text-sm lg:text-base ${
