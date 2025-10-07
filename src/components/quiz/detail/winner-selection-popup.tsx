@@ -32,7 +32,7 @@ interface Participant {
 
 type SortField =
   | "username"
-  | "score"
+  | "scored"
   | "phone"
   | "lastTransactionTotal"
   | "lastPaymentCount"
