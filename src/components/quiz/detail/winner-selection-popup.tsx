@@ -19,7 +19,7 @@ interface Participant {
   email: string;
   phone: string;
   pic: string;
-  score: number;
+  scored: number;
   usedLives: number;
   win: string;
   joinedAt: string;
