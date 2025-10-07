@@ -130,9 +130,9 @@ export default function QuizDetail({ id }: { id: string }) {
       }
 
       // Complete the quiz after setting winners
-      socket.emit("complete_quiz", {
-        quizId: id,
-      });
+      // socket.emit("complete_quiz", {
+      //   quizId: id,
+      // });
     } catch (error) {
       console.error("Error setting winners:", error);
       toast.error("Failed to set winners. Please try again.");
