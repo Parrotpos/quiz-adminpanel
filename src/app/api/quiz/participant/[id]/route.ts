@@ -18,7 +18,7 @@ export const GET = authorizeAction(async (_req, context) => {
   //       email: "romilsaptestl239@gmail.com",
   //       phone: "", // No phone for this user as per API response
   //       pic: "https://parrotpostoss.blob.core.windows.net/images/tdmginez1baafc1.png",
-  //       score: 0,
+  //       scored: 0,
   //       usedLives: 0,
   //       win: "",
   //       joinedAt: "2025-10-06T11:04:07.798Z",
@@ -34,7 +34,7 @@ export const GET = authorizeAction(async (_req, context) => {
   //       email: "testingromil123@gmail.com",
   //       phone: "8123476986",
   //       pic: "https://parrotpostoss.blob.core.windows.net/images/gaoffgsipfousa.png",
-  //       score: 0,
+  //       scored: 0,
   //       usedLives: 0,
   //       win: "",
   //       joinedAt: "2025-10-06T11:04:14.942Z",

@@ -19,7 +19,7 @@ interface Participant {
   email: string;
   phone: string;
   pic: string;
-  score: number;
+  scored: number;
   usedLives: number;
   win: string;
   joinedAt: string;
@@ -32,7 +32,7 @@ interface Participant {
 
 type SortField =
   | "username"
-  | "score"
+  | "scored"
   | "phone"
   | "lastTransactionTotal"
   | "lastPaymentCount"
@@ -73,7 +73,7 @@ export default function WinnerSelectionPopup({
       email: "romilsaptestl239@gmail.com",
       phone: "", // API response shows no phone for this user
       pic: "https://parrotpostoss.blob.core.windows.net/images/tdmginez1baafc1.png",
-      score: 0,
+      scored: 0,
       usedLives: 0,
       win: "",
       joinedAt: "2025-10-06T11:04:07.798Z",
@@ -89,7 +89,7 @@ export default function WinnerSelectionPopup({
       email: "testingromil123@gmail.com",
       phone: "8123476986",
       pic: "https://parrotpostoss.blob.core.windows.net/images/gaoffgsipfousa.png",
-      score: 0,
+      scored: 0,
       usedLives: 0,
       win: "",
       joinedAt: "2025-10-06T11:04:14.942Z",
@@ -280,7 +280,7 @@ export default function WinnerSelectionPopup({
                         <SortButton field="phone">Phone Number</SortButton>
                       </th>
                       <th className="p-2 sm:p-3 lg:p-4 text-left min-w-[60px] sm:w-24 lg:w-32 xl:w-40">
-                        <SortButton field="score">Score</SortButton>
+                        <SortButton field="scored">Score</SortButton>
                       </th>
                       <th className="p-2 sm:p-3 lg:p-4 text-left min-w-[120px] sm:w-40 lg:w-48 xl:w-56">
                         <SortButton field="lastTransactionTotal">
@@ -359,7 +359,7 @@ export default function WinnerSelectionPopup({
                           {participant.phone || "-"}
                         </td>
                         <td className="p-2 sm:p-3 lg:p-4 font-bold text-center text-blue-600 text-sm sm:text-base lg:text-lg">
-                          {participant.score}
+                          {participant.scored}
                         </td>
                         <td
                           className={`p-2 sm:p-3 lg:p-4 font-semibold text-center text-xs sm:text-sm lg:text-base ${
@@ -368,7 +368,7 @@ export default function WinnerSelectionPopup({
                               : "text-green-600"
                           }`}
                         >
-                          ₹{participant.lastTransactionTotal}
+                          RM. {participant.lastTransactionTotal}
                         </td>
                         <td
                           className={`p-2 sm:p-3 lg:p-4 font-semibold text-center text-xs sm:text-sm lg:text-base ${
