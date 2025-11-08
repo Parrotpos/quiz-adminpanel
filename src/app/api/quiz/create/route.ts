@@ -45,6 +45,6 @@ export const POST = authorizeAction(async (_req, context) => {
       "Content-Type": "multipart/form-data",
     },
   });
-
+  console.log("result: test log",result)
   return Response.json(result, { status: result.statusCode });
 });
