@@ -71,10 +71,11 @@ const QuizForm: React.FC<{
     const formData = new FormData();
 
     Object.entries(actualVals).forEach(([key, value]) => {
+
       if (key === "time") {
-        formData.append("time", moment(value, "HH:mm").utc().format("HH:mm"));
+        formData.append("time", moment(value, "HH:mm").utc().format("YYYY-MM-DDTHH:mm:ss[Z]"));
       } else if (key === "date") {
-        formData.append("date", moment(value).utc().format("YYYY-MM-DD"));
+        formData.append(key, moment(value).format("YYYY-MM-DD"));
       } else if (key === "questions") {
         // Send entire questions array as JSON
         formData.append(key, JSON.stringify(value));
@@ -111,7 +112,7 @@ const QuizForm: React.FC<{
     } catch (error) {
       toast.error(
         (error as Error)?.message ||
-        "Failed to create/update quiz. Please try again."
+          "Failed to create/update quiz. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -150,8 +151,8 @@ const QuizForm: React.FC<{
                 ? "Updating.."
                 : "Creating..."
               : editQuizHandler
-                ? "Update"
-                : "Next"}
+              ? "Update"
+              : "Next"}
           </GradientButton>
         </div>
       </form>
