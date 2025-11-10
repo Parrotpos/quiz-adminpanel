@@ -10,7 +10,7 @@ export const PUT = authorizeAction(async (req: Request, context) => {
 
   const result = await apiCall({
     url: `${endpoints.quiz.addUrl}/${id}`,
-    method: "put",
+    method: "get",
     data: form,
   });
 
