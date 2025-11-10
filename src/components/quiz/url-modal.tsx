@@ -27,7 +27,7 @@ interface UrlModalProps {
 const urlSchema = z.object({
   app_id: z.string().min(1, "App ID is required"),
   channel_name: z.string().min(1, "Channel name is required"),
-  token: z.string().min(1, "Token is required"),
+  app_certificate: z.string().min(1, "Token is required"),
   // quiz_id: z.string().min(1, "Quiz ID is required"),
 });
 
@@ -51,8 +51,8 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
       const response = await addUrl(id, {
         app_id: data.app_id,
         channel_name: data.channel_name,
-        token: data.token,
-        quiz_id: id,
+        app_certificate: data.app_certificate,
+        // quiz_id: id,
       }); // Pass the new fields to backend
 
       if (response.status) {
@@ -120,18 +120,18 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
           </div>
 
           <div className="">
-            <label htmlFor="token" className="text-xs mb-2">
-              Token
+            <label htmlFor="app_certificate" className="text-xs mb-2">
+              App certificate
             </label>
             <Input
-              id="token"
-              placeholder="Enter Token..."
-              {...register("token")}
+              id="app_certificate"
+              placeholder="Enter app_certificate..."
+              {...register("app_certificate")}
               className="h-12"
             />
-            {errors.token && (
+            {errors.app_certificate && (
               <p className="text-sm text-red-500 mt-2">
-                {errors.token.message}
+                {errors.app_certificate.message}
               </p>
             )}
           </div>
