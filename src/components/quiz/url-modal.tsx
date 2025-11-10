@@ -52,7 +52,7 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
         app_id: data.app_id,
         channel_name: data.channel_name,
         app_certificate: data.app_certificate,
-        // quiz_id: id,
+        quiz_id: id,
       }); // Pass the new fields to backend
 
       if (response.status) {

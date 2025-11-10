@@ -22,6 +22,7 @@ export const PUT = authorizeAction(async (req: Request, context) => {
       app_id: form.app_id,
       channel_name: form.channel_name,
       app_certificate: form.app_certificate,
+      quiz_id: form.quiz_id,
     },
   });
 
