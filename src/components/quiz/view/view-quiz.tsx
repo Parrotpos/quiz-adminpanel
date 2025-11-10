@@ -27,6 +27,7 @@ export default function ViewQuiz({ id }: { id: string }) {
   ];
   const router = useRouter();
   const [quizData, setQuizData] = useState<any>({});
+  console.log(quizData,": quizData")
   const [urlModalOpen, setUrlModalOpen] = useState(false);
 
   const loadingBool = useBoolean();
@@ -165,7 +166,7 @@ export default function ViewQuiz({ id }: { id: string }) {
             type="button"
             className="text-white px-6 py-2"
             onClick={() => {
-              if (quizData.videoUrl) {
+              if (quizData.agoraToken) {
                 router.push(`${paths.quiz_management.detail}/${id}`);
               } else {
                 setUrlModalOpen(true);

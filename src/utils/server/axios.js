@@ -52,6 +52,12 @@ export const endpoints = {
     participants: ADMIN_BASE_PATH + "/quiz/participant",
     next_winners: "/api/quiz/winner",
     winners: ADMIN_BASE_PATH + "/quiz/winner",
+
+    next_get_quizVisiblity: "/api/auth/quiz-module-status",
+    get_quizVisiblity: "/user/quiz-module-status",
+
+    next_quizVisiblity: "/api/quiz/module-status",
+    quizVisiblity: ADMIN_BASE_PATH + "/quiz/module-status"
   },
   moderator: {
     next_create: "/api/moderator/create",

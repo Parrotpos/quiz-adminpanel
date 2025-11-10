@@ -82,3 +82,20 @@ export const setQuizWinners = (data: {
     data,
   });
 };
+
+
+export const setVisibilityQuiz = (isVisible: boolean) => {
+  const data = {
+    isEnabled: isVisible
+  }
+  return apiClient(endpoints.quiz.next_quizVisiblity, {
+    method: "POST",
+    data,
+  });
+};
+
+export const getVisibilityQuiz = () => {
+  return apiClient(endpoints.quiz.next_get_quizVisiblity, {
+    method: "GET"
+  });
+};
