@@ -2,6 +2,7 @@
 
 import { Clock } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
+import moment from "moment";
 import { cn } from "@/lib/utils";
 import InputField from "@/components/shared/input/InputField";
 import DatePicker from "@/components/shared/datepicker/DatePicker";
@@ -111,7 +112,12 @@ export function QuizDetails({ form }: QuizDetailsProps) {
                     ? new Date().toTimeString().slice(0, 5)
                     : undefined
                 }
-                {...register("time")}
+                value={
+                  watch("time")?.includes("T") && watch("time")?.includes("Z")
+                    ? moment.utc(watch("time")).local().format("HH:mm")
+                    : watch("time") || ""
+                }
+                onChange={(e) => setValue("time", e.target.value)}
                 className={cn(
                   "w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-[13px] h-12",
                   errors.time && "border-destructive"
