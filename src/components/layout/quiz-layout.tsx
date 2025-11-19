@@ -15,6 +15,7 @@ import { Inter } from "next/font/google";
 import { paths } from "@/routes/path";
 import Image from "next/image";
 import { signOut } from "@/auth/context/jwt";
+import AgoraStreamDialog from "../quiz/agora-stream-dialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -85,6 +86,7 @@ const QuizLayout = ({ children }: IChildren) => {
                         </Link>
                       );
                     })}
+                    <AgoraStreamDialog />
                   </nav>
                 </DrawerContent>
               </Drawer>
@@ -136,6 +138,7 @@ const QuizLayout = ({ children }: IChildren) => {
                 </Link>
               );
             })}
+            <AgoraStreamDialog />
           </nav>
         </aside>
 
