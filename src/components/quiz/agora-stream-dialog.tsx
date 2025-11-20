@@ -165,7 +165,7 @@ const AgoraStreamDialog = () => {
               value={customerSecret}
               onChange={(e) => setCustomerSecret(e.target.value)}
               className="h-10"
-              type="password"
+              // type="password"
               autoComplete="off"
             />
           </div>
