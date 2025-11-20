@@ -26,8 +26,8 @@ interface UrlModalProps {
 // ✅ Zod schema
 const urlSchema = z.object({
   app_id: z.string().min(1, "App ID is required"),
-  channel_name: z.string().min(1, "Channel name is required"),
-  app_certificate: z.string().min(1, "Token is required"),
+  channel_name: z.string().min(1, "Project name is required"),
+  app_certificate: z.string().min(1, "Primary Certificate is required"),
   // quiz_id: z.string().min(1, "Quiz ID is required"),
 });
 
@@ -80,7 +80,7 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
           </DialogTitle>
           <DialogDescription className="text-center text-black">
             Before starting the quiz, you must configure the app settings.
-            Please provide the App ID, Channel Name, and Token.
+            Please provide the App ID, Project Name, and Primary Certificate.
           </DialogDescription>
         </DialogHeader>
 
@@ -104,11 +104,11 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
 
           <div className="">
             <label htmlFor="channel_name" className="text-xs mb-2">
-              Channel Name
+              Project Name
             </label>
             <Input
               id="channel_name"
-              placeholder="Enter Channel Name..."
+              placeholder="Enter Project Name..."
               {...register("channel_name")}
               className="h-12"
             />
@@ -121,11 +121,11 @@ export default function UrlModal({ open, onOpenChange, id }: UrlModalProps) {
 
           <div className="">
             <label htmlFor="app_certificate" className="text-xs mb-2">
-              App certificate
+              Primary Certificate
             </label>
             <Input
               id="app_certificate"
-              placeholder="Enter app_certificate..."
+              placeholder="Enter Primary Certificate..."
               {...register("app_certificate")}
               className="h-12"
             />

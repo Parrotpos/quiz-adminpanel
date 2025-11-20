@@ -149,6 +149,7 @@ const AgoraStreamDialog = () => {
               value={customerId}
               onChange={(e) => setCustomerId(e.target.value)}
               className="h-10"
+              autoComplete="off"
             />
           </div>
           <div>
@@ -165,6 +166,7 @@ const AgoraStreamDialog = () => {
               onChange={(e) => setCustomerSecret(e.target.value)}
               className="h-10"
               type="password"
+              autoComplete="off"
             />
           </div>
           <div>
@@ -177,6 +179,7 @@ const AgoraStreamDialog = () => {
               value={appId}
               onChange={(e) => setAppId(e.target.value)}
               className="h-10"
+              autoComplete="off"
             />
           </div>
           <GradientButton
