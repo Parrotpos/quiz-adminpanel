@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from "react";
 import debounce from "lodash/debounce";
 import QuizDetailCard from "./quiz-detail-card";
@@ -14,7 +15,11 @@ import Typography from "../ui/typegraphy";
 import GradientButton from "../molecules/gradient-button/gradient-button";
 import { useRouter } from "next/navigation";
 import { paths } from "@/routes/path";
-import { getQuizList, getVisibilityQuiz, setVisibilityQuiz } from "@/api-service/quiz.service";
+import {
+  getQuizList,
+  getVisibilityQuiz,
+  setVisibilityQuiz,
+} from "@/api-service/quiz.service";
 import { Input } from "../ui/input";
 import AssignModeratorPopup from "./create-quiz/assign-moderator-popup";
 import moment from "moment";
@@ -23,7 +28,7 @@ import { useBoolean } from "@/hooks/useBoolean";
 import DashboardSkeleton from "../shared/skeleton/dashboard-skeleton";
 import NoDataFound from "../shared/not-found/no-data-found";
 import InputField from "../shared/input/InputField";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import QuizDetailHistoryCard from "./quiz-detail-history-card";
 import { getCookie } from "@/utils/server/server-util";
@@ -37,9 +42,16 @@ const QuizComponent = () => {
   const [quizHistoryData, setQuizHistoryData] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Pagination states for history
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreHistory, setHasMoreHistory] = useState(true);
+  const [totalHistoryPages, setTotalHistoryPages] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const loadingBool = useBoolean(true);
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
+  const historyContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     fetchUserRole();
   }, []);
@@ -49,28 +61,87 @@ const QuizComponent = () => {
     authObj?.userId && setUserId(authObj?.userId);
   };
 
-  const onload = useCallback(async () => {
-    const authObj = await getCookie();
-    loadingBool.onTrue();
-    const res = await getVisibilityQuiz()
-    console.log(res, "res")
-    if (res?.isEnabled) {
-      setIsQuizVisible(res?.isEnabled)
-    }
-    const quizRes = (await getQuizList({
-      search: searchTerm,
-      date: currentDateToUTC(),
-      moderatorId: authObj?.userId ?? userId,
-    })) as any;
+  const onload = useCallback(
+    async (resetHistory = true) => {
+      const authObj = await getCookie();
+      loadingBool.onTrue();
 
-    setQuizListData(quizRes?.data?.upcoming);
-    setQuizHistoryData(quizRes?.data?.history);
-    loadingBool.onFalse();
-  }, [searchTerm, userId]);
+      const res = await getVisibilityQuiz();
+      console.log(res, "res");
+      if (res?.isEnabled) {
+        setIsQuizVisible(res?.isEnabled);
+      }
+
+      const pageToFetch = resetHistory ? 1 : currentPage;
+      const quizRes = (await getQuizList({
+        search: searchTerm,
+        date: currentDateToUTC(),
+        moderatorId: authObj?.userId ?? userId,
+        page: pageToFetch,
+        limit: 12,
+      })) as any;
+
+      setQuizListData(quizRes?.data?.upcoming);
+
+      if (resetHistory) {
+        setQuizHistoryData(quizRes?.data?.history);
+        setCurrentPage(1);
+      } else {
+        setQuizHistoryData((prev) => [...prev, ...quizRes?.data?.history]);
+      }
+
+      // Update pagination info
+      if (quizRes?.data?.pagination) {
+        setTotalHistoryPages(quizRes.data.pagination.historyTotalPages);
+        setHasMoreHistory(
+          pageToFetch < quizRes.data.pagination.historyTotalPages
+        );
+      }
+
+      loadingBool.onFalse();
+    },
+    [searchTerm, userId, currentPage]
+  );
+
+  const loadMoreHistory = useCallback(async () => {
+    if (!hasMoreHistory || loadingMore) return;
+
+    setLoadingMore(true);
+    const authObj = await getCookie();
+
+    try {
+      const nextPage = currentPage + 1;
+      const quizRes = (await getQuizList({
+        search: searchTerm,
+        date: currentDateToUTC(),
+        moderatorId: authObj?.userId ?? userId,
+        page: nextPage,
+        limit: 12,
+      })) as any;
+
+      if (quizRes?.data?.history?.length > 0) {
+        setQuizHistoryData((prev) => [...prev, ...quizRes.data.history]);
+        setCurrentPage(nextPage);
+
+        if (quizRes?.data?.pagination) {
+          setHasMoreHistory(
+            nextPage < quizRes.data.pagination.historyTotalPages
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error loading more history:", error);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [hasMoreHistory, loadingMore, currentPage, searchTerm, userId]);
 
   useEffect(() => {
     const handler = debounce(() => {
-      onload();
+      // Reset pagination when search term changes
+      setCurrentPage(1);
+      setHasMoreHistory(true);
+      onload(true);
     }, 300);
 
     handler();
@@ -78,16 +149,41 @@ const QuizComponent = () => {
     return () => handler.cancel();
   }, [searchTerm]);
 
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMoreHistory && !loadingMore) {
+          loadMoreHistory();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "100px",
+      }
+    );
+
+    const currentRef = historyContainerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMoreHistory, loadingMore, loadMoreHistory]);
+
   const changeVisiblityOfQuiz = async (checked) => {
     const response = await setVisibilityQuiz(checked);
-    console.log("response: ", response)
+    console.log("response: ", response);
     if (response?.data?.data) {
-      setIsQuizVisible(response?.data?.data?.isEnabled)
-      toast.success(
-        response.data?.message
-      );
+      setIsQuizVisible(response?.data?.data?.isEnabled);
+      toast.success(response.data?.message);
     }
-  }
+  };
   return (
     <div className="flex flex-col flex-[0_0_auto] space-y-4 my-2 mx-3">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
@@ -100,7 +196,7 @@ const QuizComponent = () => {
               <Switch
                 checked={isQuizVisible}
                 onCheckedChange={(checked) => {
-                  changeVisiblityOfQuiz(checked)
+                  changeVisiblityOfQuiz(checked);
                   // setValue("isFree", checked, {
                   //   shouldValidate: true,
                   //   shouldTouch: true,
@@ -112,9 +208,7 @@ const QuizComponent = () => {
                   // }
                 }}
               />
-              <div>
-                Is visible quiz?
-              </div>
+              <div>Is visible quiz?</div>
             </div>
           </div>
           <div className="relative w-full sm:w-[400px] bg-white rounded-lg">
@@ -173,11 +267,38 @@ const QuizComponent = () => {
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
               {quizHistoryData?.length > 0 ? (
-                quizHistoryData.map((data: any, index: number) => (
-                  <Fragment key={index}>
-                    <QuizDetailHistoryCard data={data} />
-                  </Fragment>
-                ))
+                <>
+                  {quizHistoryData.map((data: any, index: number) => (
+                    <Fragment key={`${data._id}-${index}`}>
+                      <QuizDetailHistoryCard data={data} />
+                    </Fragment>
+                  ))}
+
+                  {/* Infinite scroll trigger */}
+                  {hasMoreHistory && (
+                    <div
+                      ref={historyContainerRef}
+                      className="col-span-full flex justify-center items-center py-6"
+                    >
+                      {loadingMore ? (
+                        <div className="flex items-center space-x-2">
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          <span className="text-gray-600">Loading more...</span>
+                        </div>
+                      ) : (
+                        <div className="text-gray-400">Scroll for more</div>
+                      )}
+                    </div>
+                  )}
+
+                  {!hasMoreHistory && quizHistoryData.length > 0 && (
+                    <div className="col-span-full flex justify-center items-center py-6">
+                      <span className="text-gray-400">
+                        No more history to load
+                      </span>
+                    </div>
+                  )}
+                </>
               ) : (
                 <NoDataFound description="No quiz history available." />
               )}

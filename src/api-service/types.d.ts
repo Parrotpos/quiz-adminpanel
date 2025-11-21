@@ -46,4 +46,7 @@ interface AddAnnouncementForQuizApiParams {
 interface QuizListAPiParams {
   search?: string;
   date?: string;
+  page?: number;
+  limit?: number;
+  moderatorId?: string;
 }
