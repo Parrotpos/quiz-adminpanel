@@ -52,6 +52,8 @@ const QuizComponent = () => {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const historyContainerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     fetchUserRole();
   }, []);
@@ -160,12 +162,12 @@ const QuizComponent = () => {
       },
       {
         threshold: 0.1,
-        rootMargin: "100px",
+        rootMargin: "50px",
       }
     );
 
-    const currentRef = historyContainerRef.current;
-    if (currentRef) {
+    const currentRef = sentinelRef.current;
+    if (currentRef && hasMoreHistory) {
       observer.observe(currentRef);
     }
 
@@ -174,7 +176,7 @@ const QuizComponent = () => {
         observer.unobserve(currentRef);
       }
     };
-  }, [hasMoreHistory, loadingMore, loadMoreHistory]);
+  }, [hasMoreHistory, loadingMore, loadMoreHistory, quizHistoryData]);
 
   const changeVisiblityOfQuiz = async (checked) => {
     const response = await setVisibilityQuiz(checked);
@@ -274,20 +276,23 @@ const QuizComponent = () => {
                     </Fragment>
                   ))}
 
-                  {/* Infinite scroll trigger */}
-                  {hasMoreHistory && (
+                  {/* Loading more indicator */}
+                  {loadingMore && (
+                    <div className="col-span-full flex justify-center items-center py-6">
+                      <div className="flex items-center space-x-2">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span className="text-gray-600">Loading more...</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Infinite scroll sentinel */}
+                  {hasMoreHistory && !loadingMore && (
                     <div
-                      ref={historyContainerRef}
-                      className="col-span-full flex justify-center items-center py-6"
+                      ref={sentinelRef}
+                      className="col-span-full h-10 flex justify-center items-center"
                     >
-                      {loadingMore ? (
-                        <div className="flex items-center space-x-2">
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          <span className="text-gray-600">Loading more...</span>
-                        </div>
-                      ) : (
-                        <div className="text-gray-400">Scroll for more</div>
-                      )}
+                      <div className="text-gray-400 text-sm">Scroll for more</div>
                     </div>
                   )}
 
