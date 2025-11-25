@@ -24,6 +24,7 @@ const AgoraStreamDialog = () => {
   const [customerId, setCustomerId] = useState("");
   const [customerSecret, setCustomerSecret] = useState("");
   const [appId, setAppId] = useState("");
+  const [channel, setChannel] = useState("");
   const [streamKey, setStreamKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -39,12 +40,15 @@ const AgoraStreamDialog = () => {
     setCustomerId("");
     setCustomerSecret("");
     setAppId("");
+    setChannel("");
     setLoading(false);
   };
 
   const handleGetStreamKey = async () => {
-    if (!customerId || !customerSecret || !appId) {
-      toast.error("Please enter Customer ID, Customer Secret and App ID.");
+    if (!customerId || !customerSecret || !appId || !channel.trim()) {
+      toast.error(
+        "Please enter Customer ID, Customer Secret, App ID and Channel name."
+      );
       return;
     }
     const basicToken = btoa(`${customerId}:${customerSecret}`);
@@ -63,7 +67,7 @@ const AgoraStreamDialog = () => {
           },
           body: JSON.stringify({
             settings: {
-              channel: DEFAULT_CHANNEL,
+              channel: channel.trim(),
               uid: DEFAULT_UID,
               expiresAfter: 0,
             },
@@ -178,6 +182,19 @@ const AgoraStreamDialog = () => {
               placeholder="Enter App ID..."
               value={appId}
               onChange={(e) => setAppId(e.target.value)}
+              className="h-10"
+              autoComplete="off"
+            />
+          </div>
+          <div>
+            <label htmlFor="channel" className="text-xs mb-1 block font-medium">
+              Channel Name
+            </label>
+            <Input
+              id="channel"
+              placeholder="Enter Channel Name..."
+              value={channel}
+              onChange={(e) => setChannel(e.target.value)}
               className="h-10"
               autoComplete="off"
             />
