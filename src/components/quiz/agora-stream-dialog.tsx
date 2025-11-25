@@ -47,7 +47,7 @@ const AgoraStreamDialog = () => {
   const handleGetStreamKey = async () => {
     if (!customerId || !customerSecret || !appId || !channel.trim()) {
       toast.error(
-        "Please enter Customer ID, Customer Secret, App ID and Channel name."
+        "Please enter Customer ID, Customer Secret, App ID and Project name."
       );
       return;
     }
@@ -187,12 +187,12 @@ const AgoraStreamDialog = () => {
             />
           </div>
           <div>
-            <label htmlFor="channel" className="text-xs mb-1 block font-medium">
-              Channel Name
+            <label htmlFor="project" className="text-xs mb-1 block font-medium">
+              Project Name
             </label>
             <Input
-              id="channel"
-              placeholder="Enter Channel Name..."
+              id="project"
+              placeholder="Enter Project Name..."
               value={channel}
               onChange={(e) => setChannel(e.target.value)}
               className="h-10"
