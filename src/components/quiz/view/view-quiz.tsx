@@ -157,9 +157,7 @@ export default function ViewQuiz({ id }: { id: string }) {
             </CardContent>
           </Card>
         </div>
-
         <UrlModal open={urlModalOpen} onOpenChange={setUrlModalOpen} id={id} />
-
         {/* Start Quiz Button */}
         <div className="mt-6">
           <GradientButton
