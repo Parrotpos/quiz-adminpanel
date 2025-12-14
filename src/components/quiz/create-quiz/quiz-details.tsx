@@ -62,7 +62,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
         <div className="mb-4">
           <ImageDropzone
             value={
-              watch("image") instanceof File
+              typeof File !== "undefined" && watch("image") instanceof File
                 ? watch("image")
                 : watch("image")
                 ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
