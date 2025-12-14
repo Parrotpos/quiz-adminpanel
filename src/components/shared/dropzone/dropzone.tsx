@@ -30,7 +30,7 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   const MAX_FILE_SIZE_MB = 4;
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    (acceptedFiles: Blob[]) => {
       const file = acceptedFiles[0];
 
       if (file) {

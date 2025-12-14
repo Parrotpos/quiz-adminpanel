@@ -31,7 +31,6 @@ export const POST = authorizeAction(async (_req, context) => {
       typeof value === "object" &&
       typeof (value as any).arrayBuffer === "function"
     ) {
-   // } else if (value instanceof File || value instanceof Blob) {
       formData.append(key, value);
     } else if (Array.isArray(value)) {
       value.forEach((val, i) => formData.append(`${key}[${i}]`, String(val)));

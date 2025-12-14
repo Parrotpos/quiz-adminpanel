@@ -29,6 +29,7 @@ export function QuizDetails({ form }: QuizDetailsProps) {
   } = form;
   const values = watch(); // returns all current form values
   console.log("values: ", values);
+  const imageValue = watch("image");
 
   // Custom validation for date and time
   useEffect(() => {
@@ -60,16 +61,18 @@ export function QuizDetails({ form }: QuizDetailsProps) {
 
       <div className="p-6 !h-[calc(100dvh-280px)] overflow-auto">
         <div className="mb-4">
+          
           <ImageDropzone
             value={
-              typeof File !== "undefined" && watch("image") instanceof File
-                ? watch("image")
-                : watch("image")
-                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${watch("image")}`
+              imageValue instanceof Blob
+                ? imageValue
+                : imageValue
+                ? `${process.env.NEXT_PUBLIC_SERVER_URL_IMAGE}${imageValue}`
                 : null
             }
-            onChange={(file: File | null) => setValue("image", file)}
+            onChange={(file) => setValue("image", file)}
           />
+
         </div>
 
         <div className="mb-4">

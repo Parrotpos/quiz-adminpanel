@@ -1,6 +1,6 @@
 interface ImageDropzoneProps {
-  value?: File | string | null;
-  onChange?: (file: File | null) => void;
+  value?: Blob | string | null;
+  onChange?: (file: Blob | null) => void;
   label?: string;
   error?: string;
 }
