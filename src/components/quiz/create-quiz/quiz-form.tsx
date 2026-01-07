@@ -79,7 +79,11 @@ const QuizForm: React.FC<{
       } else if (key === "questions") {
         // Send entire questions array as JSON
         formData.append(key, JSON.stringify(value));
-      } else if (value instanceof File) {
+      } else if (
+        value &&
+        typeof value === "object" &&
+        typeof (value as any).arrayBuffer === "function"
+      ) {
         formData.append(key, value);
       } else if (Array.isArray(value)) {
         formData.append(key, JSON.stringify(value)); // optional: depends on backend

@@ -24,7 +24,11 @@ export const POST = authorizeAction(async (_req, context) => {
           String(questionObj.isHidden)
         );
       });
-    } else if (value instanceof File || value instanceof Blob) {
+    }  if (
+      value &&
+      typeof value === "object" &&
+      typeof (value as any).arrayBuffer === "function"
+    ) {
       formData.append(key, value);
     } else if (Array.isArray(value)) {
       value.forEach((val, i) => formData.append(`${key}[${i}]`, String(val)));

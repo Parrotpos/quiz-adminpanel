@@ -14,7 +14,11 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (value instanceof File) {
+    if (
+      value &&
+      typeof value === "object" &&
+      typeof (value as any).arrayBuffer === "function"
+    ) {
       setPreview(URL.createObjectURL(value));
     } else if (typeof value === "string") {
       setPreview(value);
@@ -26,7 +30,7 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({
   const MAX_FILE_SIZE_MB = 4;
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    (acceptedFiles: Blob[]) => {
       const file = acceptedFiles[0];
 
       if (file) {

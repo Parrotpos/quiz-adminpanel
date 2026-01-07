@@ -23,7 +23,7 @@ export const quizSchema = z
     title: z.string().min(1, "Title is required"),
     date: z.string().min(1, "Date is required"),
     image: z
-      .union([z.instanceof(File), z.string()])
+      .union([z.instanceof(Blob), z.string()])
       .nullable()
       .refine(
         (value) => {

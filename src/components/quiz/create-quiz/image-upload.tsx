@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Upload } from "lucide-react";
 
 interface ImageUploadProps {
-  onImageChange?: (file: File) => void;
+  onImageChange?: (file: Blob | null) => void;
 }
 
 export function ImageUpload({ onImageChange }: ImageUploadProps) {
