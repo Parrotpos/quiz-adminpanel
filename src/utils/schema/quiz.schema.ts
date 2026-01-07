@@ -35,7 +35,7 @@ export const quizSchema = z
       ),
     time: z.string().min(1, "Time is required"),
     joinType: z.enum(["unlimited", "restricted"], {
-      errorMap: () => ({ message: "Join type is required" }),
+      message: "Join type is required",
     }),
     maxUsers: z.coerce.number().optional(), // make optional for now
     isFree: z.boolean().default(false),
@@ -45,12 +45,7 @@ export const quizSchema = z
       .number()
       .min(1, "Countdown must be at least 1 second"),
     description: z.string().min(1, "Description is required"),
-    moderator: z
-      .string({
-        required_error: "Moderator is required",
-        invalid_type_error: "Moderator must be a string",
-      })
-      .min(1, { message: "Moderator is required" }),
+    moderator: z.string({ message: "Moderator is required" }).min(1, "Moderator is required"),
     questions: z
       .array(questionSchema)
       .min(1, "At least one question is required"),

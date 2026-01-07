@@ -1,6 +1,4 @@
-export const config = {
-  runtime: "nodejs",
-};
+export const runtime = "nodejs";
 
 import { endpoints } from "@/utils/server/axios";
 import { apiCall, authorizeAction } from "src/lib/middleware/authorizeAction";
