@@ -27,7 +27,7 @@ export default function ViewQuiz({ id }: { id: string }) {
   ];
   const router = useRouter();
   const [quizData, setQuizData] = useState<any>({});
-  console.log(quizData,": quizData")
+  console.log(quizData, ": quizData")
   const [urlModalOpen, setUrlModalOpen] = useState(false);
 
   const loadingBool = useBoolean();
@@ -159,31 +159,33 @@ export default function ViewQuiz({ id }: { id: string }) {
         </div>
         <UrlModal open={urlModalOpen} onOpenChange={setUrlModalOpen} id={id} />
         {/* Start Quiz Button */}
-        <div className="mt-6">
-          <GradientButton
-            type="button"
-            className="text-white px-6 py-2"
-            onClick={() => {
-              if (quizData.agoraToken) {
-                router.push(`${paths.quiz_management.detail}/${id}`);
-              } else {
-                setUrlModalOpen(true);
-              }
-            }}
-          >
-            Start Quiz Now
-          </GradientButton>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              onNotify();
-            }}
-            className="font-bold px-8 py-5 text-[#0E76BC] border-2 border-[#0E76BC] hover:text-[#0E76BC] ml-2"
-          >
-            Notify to users
-          </Button>
-        </div>
+        {quizData?.status !== "completed" && (
+          <div className="mt-6">
+            <GradientButton
+              type="button"
+              className="text-white px-6 py-2"
+              onClick={() => {
+                if (quizData.agoraToken) {
+                  router.push(`${paths.quiz_management.detail}/${id}`);
+                } else {
+                  setUrlModalOpen(true);
+                }
+              }}
+            >
+              Start Quiz Now
+            </GradientButton>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                onNotify();
+              }}
+              className="font-bold px-8 py-5 text-[#0E76BC] border-2 border-[#0E76BC] hover:text-[#0E76BC] ml-2"
+            >
+              Notify to users
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

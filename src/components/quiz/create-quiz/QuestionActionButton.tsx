@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { differenceInSeconds } from "date-fns";
-import { Clock } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import moment from "moment";
 import GradientButton from "@/components/molecules/gradient-button/gradient-button";
 
@@ -28,6 +28,11 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
 }) => {
   const [diffSeconds, setDiffSeconds] = useState<number>(NaN);
   const [count, setCount] = useState<number>(NaN);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [question]);
 
   useEffect(() => {
     if (!showDate) return;
@@ -54,6 +59,22 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
     return () => clearInterval(interval);
   }, [showDate, quizData?.questionCountdown]);
 
+  const handleShowQuestion = (id: string) => {
+    setLoading(true);
+    onShowQuestionClick(id);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  };
+
+  const handleShowAnswer = (id: string) => {
+    setLoading(true);
+    onShowAnswerClick(id);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  };
+
   const isNaNTime = isNaN(count);
   if (question.isShow && question.isShowAnswer) {
     // console.log("Bane true", questionId);
@@ -78,8 +99,9 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
           fromGradient="from-[#71D561]"
           toGradient="to-[#00A32E]"
           className="text-white px-4 h-[30px] text-[12px]"
-          onClick={() => onShowQuestionClick(questionId)}
-          disabled={winnerList.length > 0}
+          onClick={() => handleShowQuestion(questionId)}
+          disabled={winnerList.length > 0 || loading}
+          loading={loading}
         >
           Show Question
         </GradientButton>
@@ -95,9 +117,17 @@ const QuestionActionButton: React.FC<QuestionActionButtonProps> = ({
       {count <= 0 && (
         <Button
           className="bg-yellow-600 hover:bg-yellow-700 text-white px-6"
-          onClick={() => onShowAnswerClick(questionId)}
+          onClick={() => handleShowAnswer(questionId)}
+          disabled={loading}
         >
-          Show Answer
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </>
+          ) : (
+            "Show Answer"
+          )}
         </Button>
       )}
     </div>
