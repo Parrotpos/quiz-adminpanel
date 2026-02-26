@@ -1,15 +1,18 @@
 "use client";
 
 import { useMemo, useEffect, useCallback, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { AuthContext } from "../auth-context";
 import { getSession } from "./utils";
 import { apiClient } from "@/utils/server/client-api";
 import axiosInstance from "@/utils/server/axios";
+import { paths } from "@/routes/path";
 
 // ----------------------------------------------------------------------
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const pathname = usePathname();
   const [state, setState] = useState<AuthState>({
     user: null,
     loading: true,
@@ -32,9 +35,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [setState, getSession]);
 
   useEffect(() => {
+    // Skip session check on login page — no cookie yet, avoids 401 in console
+    if (pathname === paths.auth.login) {
+      setState({ user: null, loading: false });
+      return;
+    }
     checkUserSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   const checkAuthenticated = state.user ? "authenticated" : "unauthenticated";
 

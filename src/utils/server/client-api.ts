@@ -14,6 +14,7 @@ export const apiClient = async (
 ) => {
   const config: RequestInit = {
     method,
+    credentials: "include", // Send cookies (e.g. auth) with same-origin and API requests
     headers: {
       ...headers,
       ...(data && !(data instanceof FormData) && method !== "GET"
@@ -38,7 +39,13 @@ export const apiClient = async (
 
   const responseData = await res.json();
 
-  if (!url.includes("login") && responseData?.statusCode === 401) {
+  // Redirect to login on 401, but not for auth/status (used to check session) or login endpoint
+  const isAuthStatusOrLogin =
+    url.includes("/api/auth/status") || url.includes("login");
+  if (
+    !isAuthStatusOrLogin &&
+    (res.status === 401 || responseData?.statusCode === 401)
+  ) {
     window.location.href = window.location.origin + paths.auth.login;
     signOut();
   }
