@@ -1,12 +1,12 @@
 // @ts-nocheck
- 
+
 "use client";
- 
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
- 
+
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,14 +22,14 @@ import { useAuthContext } from "@/auth/hooks/use-auth-context";
 import { paths } from "@/routes/path";
 import GradientButton from "../molecules/gradient-button/gradient-button";
 import { useBoolean } from "@/hooks/useBoolean";
- 
+
 const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
- 
+
   const { checkUserSession } = useAuthContext();
   const loadingBool = useBoolean();
- 
+
   const {
     register,
     handleSubmit,
@@ -38,7 +38,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
     resolver: zodResolver(loginSchema),
     mode: "onChange",
   });
- 
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       loadingBool.onTrue();
@@ -48,7 +48,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
           isAdmin
         )) as IDefaultResponse;
         console.log("loginRes: ", loginRes);
- 
+
         if (Number(loginRes?.status) === 200 && loginRes?.token) {
           await setAuthCookie({
             token: loginRes?.token as string,
@@ -56,7 +56,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
           }); // Cookie is now securely stored
           await checkUserSession();
         }
- 
+
         if (loginRes.status) {
           router.push(paths.quiz_management.root);
         } else {
@@ -78,7 +78,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
           }); // Cookie is now securely stored
           await checkUserSession();
         }
- 
+
         if (loginRes.status) {
           router.push(paths.quiz_management.root);
         } else {
@@ -86,16 +86,15 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
         }
       }
       loadingBool.onFalse();
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("Login error: ", error);
       loadingBool.onFalse();
-      const message = error instanceof Error ? error.message : "An error occurred during login. Please try again.";
-      toast.error(message);
+      toast.error("An error occurred during login. Please try again.");
     } finally {
       loadingBool.onFalse();
     }
   };
- 
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -109,7 +108,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
               In
             </span>
           </div>
- 
+
           {/* Email field */}
           <div className="w-full">
             <InputField
@@ -129,7 +128,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
               error={errors?.email?.message}
             />
           </div>
- 
+
           {/* Password field */}
           <div className="w-full">
             <InputField
@@ -163,7 +162,7 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
               error={errors?.password?.message}
             />
           </div>
- 
+
           {/* Sign In button */}
           <GradientButton
             fromGradient="from-[#82C63F]"
@@ -178,7 +177,5 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
     </form>
   );
 };
- 
+
 export default LoginForm;
- 
- 
