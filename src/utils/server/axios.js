@@ -4,11 +4,18 @@ export const ADMIN_BASE_PATH = "/admin";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  timeout: 30000, // 30 seconds timeout for production stability
 });
 
 axiosInstance.interceptors.response.use(
   (res) => res,
   (err) => {
+    if (err.code === "ECONNABORTED" || err.message?.includes("timeout")) {
+      return Promise.reject({ 
+        message: "Request timed out. Please check your network connection and try again.",
+        status: 408 
+      });
+    }
     const errorData = err?.response?.data || { message: "Server Error" };
     return Promise.reject(errorData);
   }

@@ -8,6 +8,7 @@ export async function createAuthenticatedAxios() {
 
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+    timeout: 30000, // 30 seconds timeout for production stability
   });
 
   if (authCookie) {

@@ -35,8 +35,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [setState, getSession]);
 
   useEffect(() => {
-    // Skip session check on login page — no cookie yet, avoids 401 in console
-    if (pathname === paths.auth.login) {
+    // Skip session check on login pages — no cookie yet, avoids 401 in console
+    const isLoginPage = pathname?.startsWith("/login");
+    if (isLoginPage) {
       setState({ user: null, loading: false });
       return;
     }

@@ -40,55 +40,46 @@ const LoginForm = ({ isAdmin }: { isAdmin?: boolean }) => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    loadingBool.onTrue();
+    
     try {
-      loadingBool.onTrue();
       if (isAdmin) {
-        const loginRes = (await adminNextLoginService(
-          data,
-          isAdmin
+        // Using direct API call instead of Next.js proxy to avoid 504 timeout
+        const loginRes = (await adminLoginService(
+          data
         )) as IDefaultResponse;
-        console.log("loginRes: ", loginRes);
 
         if (Number(loginRes?.status) === 200 && loginRes?.token) {
           await setAuthCookie({
             token: loginRes?.token as string,
             userRole: "admin",
-          }); // Cookie is now securely stored
+          });
           await checkUserSession();
-        }
-
-        if (loginRes.status) {
           router.push(paths.quiz_management.root);
         } else {
-          toast.error(loginRes?.message);
+          toast.error(loginRes?.message || "Login failed. Please try again.");
         }
       } else {
         const loginRes = (await moderatorNextLoginService(
           data,
           isAdmin
         )) as IDefaultResponse;
+        
         if (Number(loginRes?.status) === 200 && loginRes?.token) {
-          console.log("loginRes: ", loginRes);
-          console.log("loginRes.data._id: ", loginRes.data._id);
           await setAuthCookie({
             token: loginRes?.token as string,
             userRole: "moderator",
             fullName: loginRes.data.fullName,
             userId: loginRes.data._id,
-          }); // Cookie is now securely stored
+          });
           await checkUserSession();
-        }
-
-        if (loginRes.status) {
           router.push(paths.quiz_management.root);
         } else {
-          toast.error(loginRes?.message);
+          toast.error(loginRes?.message || "Login failed. Please try again.");
         }
       }
-      loadingBool.onFalse();
     } catch (error) {
-      console.error("Login error: ", error);
-      loadingBool.onFalse();
+      console.error("Login error:", error);
       toast.error("An error occurred during login. Please try again.");
     } finally {
       loadingBool.onFalse();
